@@ -33,11 +33,11 @@ jobs:
         env:
           CF_USERNAME: ${{ secrets.CF_USERNAME }}
           CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
-          run: |
-            cf api https://api.london.cloud.service.gov.uk
-            cf auth
-            cf target -o national-lottery-heritage-fund
-            cf target -s sandbox
-            cf v3-cancel-zdt-push dsdt-tech-docs || true
-            cf v3-apply-manifest -f manifest.yml
-            cf v3-zdt-push dsdt-tech-docs  --wait-for-deploy-complete
+        run: |
+          cf api https://api.london.cloud.service.gov.uk
+          cf auth
+          cf target -o national-lottery-heritage-fund
+          cf target -s sandbox
+          cf v3-cancel-zdt-push dsdt-tech-docs || true
+          cf v3-apply-manifest -f manifest.yml
+          cf v3-zdt-push dsdt-tech-docs  --wait-for-deploy-complete
