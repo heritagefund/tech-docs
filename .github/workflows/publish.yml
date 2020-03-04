@@ -37,4 +37,6 @@ jobs:
           cf auth
           cf target -o national-lottery-heritage-fund
           cf target -s sandbox
-          cf zero-downtime-push dsdt-tech-docs -f manifest.yml
+          cf v3-cancel-zdt-push dsdt-tech-docs || true
+          cf v3-apply-manifest -f manifest.yml
+          cf v3-zdt-push dsdt-tech-docs --wait-for-deploy-complete
