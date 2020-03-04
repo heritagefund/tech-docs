@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/setup-ruby@v1
         with:
-          version: '2.6'
+          ruby-version: '2.6'
 
       - name: Install the CloudFoundry CLI
         if: github.ref == 'refs/heads/master'
@@ -24,8 +24,7 @@ jobs:
         if: github.ref == 'refs/heads/master'
         run: |
           gem install bundler
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
+          bundle install
           bundle exec middleman build
 
       - name: Deploy site to staging
@@ -40,4 +39,4 @@ jobs:
           cf target -s sandbox
           cf v3-cancel-zdt-push dsdt-tech-docs || true
           cf v3-apply-manifest -f manifest.yml
-          cf v3-zdt-push dsdt-tech-docs  --wait-for-deploy-complete
+          cf v3-zdt-push dsdt-tech-docs --wait-for-deploy-complete
