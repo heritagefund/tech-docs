@@ -1,3 +1,3 @@
-# Small grants service
+# Apply for £3-10k funding
 
-Some stuff
+This section contains documentation on the 'Apply for £3-10k funding' service.
