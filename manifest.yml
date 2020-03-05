@@ -1,6 +1,6 @@
 applications:
   - name: dsdt-tech-docs
     memory: 64M
-    path: ./build
+    path: .
     buildpack: staticfile_buildpack
     instances: 2
