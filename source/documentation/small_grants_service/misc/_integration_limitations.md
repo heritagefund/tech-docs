@@ -29,3 +29,10 @@ end
 When Salesforce has been updated to handle this scenario, this validation 
 should be removed from the `legal_signatories` model. This has been referenced 
 in [GitHub issue 319](https://github.com/heritagefund/funding-frontend/issues/319).
+
+## Total costs claimed
+We include total costs claimed in the completion report payload. e.g. in [https://github.com/heritagefund/salesforce-poc/blob/baac42d9c52de5c90d0b0f4a67efb11abb4ea86f/payloads/CompletionReport.json#L93](https://github.com/heritagefund/salesforce-poc/blob/baac42d9c52de5c90d0b0f4a67efb11abb4ea86f/payloads/CompletionReport.json#L93) ideally this would be computed on Salesforce side but is not done currently due to limitations on Salesforce side.
+
+## Address fields 
+Our frontend address provider includes 3 lines of address details. However, Salesforce only has one field for Street so we concatenate it. 
+The 'Billing Country' field in Salesforce is re-purposed to store the address County. 
