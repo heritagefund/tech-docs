@@ -14,21 +14,18 @@ jobs:
           ruby-version: '2.6'
 
       - name: Install the CloudFoundry CLI
-        if: github.ref == 'refs/heads/master'
         run: |
           wget https://s3-us-west-1.amazonaws.com/cf-cli-releases/releases/v6.48.0/cf-cli-installer_6.48.0_x86-64.deb
           sudo dpkg -i cf-cli-installer_6.48.0_x86-64.deb
 
       - uses: actions/checkout@master
       - name: Build site
-        if: github.ref == 'refs/heads/master'
         run: |
           gem install bundler
           bundle install
           bundle exec middleman build
 
       - name: Deploy site to staging
-        if: github.ref == 'refs/heads/master'
         env:
           CF_USERNAME: ${{ secrets.CF_USERNAME }}
           CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
