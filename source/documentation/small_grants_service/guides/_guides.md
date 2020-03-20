@@ -75,13 +75,17 @@ cf v3-cancel-zdt-push APP_NAME
 where `APP_NAME` is the name of the Cloud Foundry app being deployed.
 
 ## How to setup Salesforce VSCode integration
-Follow the steps at: https://developer.salesforce.com/tools/vscode/en/getting-started/install
+
+### Installation
+Follow the steps at: [https://developer.salesforce.com/tools/vscode/en/getting-started/install](https://developer.salesforce.com/tools/vscode/en/getting-started/install)
+
 After following these steps you should have installed the following:
+
 * JDK 11
 * Salesforce VSCode extensions
 * Salesforce CLI
 
-### Configuring VSCode
+### Configuration
 Set the JDK path for the Salesforce Extension:
 
 Code > Preferences > Settings > Extensions > Salesforce Apex Configuration > Java: Home
@@ -104,4 +108,5 @@ Back in VSCode click 'No Default Org Set' and switch to the org created by the p
 Terminal > New Terminal 
 
 From the terminal run in your workspace directory run: `sfdx force:source:retrieve -m ApexClass` 
+
 The Apex classes should now be available at `force-app/main/default/classes`.
