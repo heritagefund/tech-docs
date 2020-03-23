@@ -107,6 +107,6 @@ Back in VSCode click 'No Default Org Set' and switch to the org created by the p
 
 Terminal > New Terminal 
 
-From the terminal run in your workspace directory run: `sfdx force:source:retrieve -m ApexClass` 
+From the terminal in your workspace directory run: `sfdx force:source:retrieve -m ApexClass` 
 
 The Apex classes should now be available at `force-app/main/default/classes`.
