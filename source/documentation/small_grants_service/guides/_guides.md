@@ -73,3 +73,40 @@ cf v3-cancel-zdt-push APP_NAME
 ```
 
 where `APP_NAME` is the name of the Cloud Foundry app being deployed.
+
+## How to setup Salesforce VSCode integration
+
+### Installation
+Follow the steps at: [https://developer.salesforce.com/tools/vscode/en/getting-started/install](https://developer.salesforce.com/tools/vscode/en/getting-started/install)
+
+After following these steps you should have installed the following:
+
+* JDK 11
+* Salesforce VSCode extensions
+* Salesforce CLI
+
+### Configuration
+Set the JDK path for the Salesforce Extension:
+
+Code > Preferences > Settings > Extensions > Salesforce Apex Configuration > Java: Home
+
+Set to the path where JDK 11 installed e.g. `/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home`
+
+Setup a new project by going to:
+
+View > Command Palette > SFDX: Create Project
+
+From the resulting workspace open the file `sfdx-project.json`
+Edit the value of `"sfdcLoginUrl"` to `"https://test.salesforce.com"` (assuming you want to checkout the Sandbox code).
+
+From the blue bar at the bottom of the VSCode window click 'No Default Org Set' click 'SFDX: Authorize an Org'
+
+Follow the steps in your browser to login to the sandbox
+
+Back in VSCode click 'No Default Org Set' and switch to the org created by the previous step
+
+Terminal > New Terminal 
+
+From the terminal in your workspace directory run: `sfdx force:source:retrieve -m ApexClass` 
+
+The Apex classes should now be available at `force-app/main/default/classes`.
