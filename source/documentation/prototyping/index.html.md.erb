@@ -1,0 +1,135 @@
+---
+title: Prototyping
+weight: 2
+---
+
+# Prototyping
+
+How to create high fidelity prototypes of services at The National Lottery Heritage Fund.
+
+## How to install the Prototype Kit on your machine
+
+The base code for the National Lottery Heritage Fund version of the GOVUK Prototype Kit is [hosted on Github](https://github.com/heritagefund/prototype-kit).
+
+To be able to use the prototype kit you will need to install it on your computer. This is known as installing it 'locally'.
+
+### Steps
+
+1. Checkout the code for the kit using Git and Github. The code repository is at this URL: [https://github.com/heritagefund/prototype-kit](https://github.com/heritagefund/prototype-kit) - (How to do this is beyond the scope of this documentation)
+
+    ```
+    git clone git@github.com:heritagefund/prototype-kit.git
+    ```
+
+2. You can read how to [install the kit to your local machine](https://govuk-prototype-kit.herokuapp.com/docs/install) on the [GOVUK Prototype Kit documentation](https://govuk-prototype-kit.herokuapp.com/docs)
+
+## How to create a GOVUK PaaS instance of the Prototype Kit
+
+### Requirements
+
+- You will need a [GOVUK Platform as a Service](https://www.cloud.service.gov.uk/) account
+- You will need a [Github](https://github.com/) account
+- Cloud Foundry CLI tools installed (See guidance for [How to login to the GOV.UK PaaS CLI](/documentation/small_grants_service/guides.html#how-to-login-to-the-gov-uk-paas-cli))
+
+### Steps
+
+1. Log into your GaaP account - If you don't how to do this, you can read [how to login via the commandline](/documentation/small_grants_service/guides.html#how-to-login-to-the-gov-uk-paas-cli)
+
+2. Target the appropriate organisation and space by running:
+
+    ```
+    cf target -o national-lottery-heritage-fund -s sandbox
+    ```
+
+3. Create a `manifest.yml` file in the same local directory as your prototype's code. The manifest file tells Cloud Foundry what to do with your app. An example manifest:
+
+    ```
+    ---
+    applications:
+    - name: APP_NAME
+        memory: 256M
+        buildpacks:
+        - nodejs_buildpack
+        services:
+        - session-store
+    ```
+
+    where `APP_NAME` is the unique name for your app. You can run `cf apps` to see apps which already exist.
+
+4. Deploy your prototype by running the following in the directory which contains your prototype's code, configuration files, and manifest:
+
+    ```
+    cf push
+    ```
+
+5. Set environment variables for the basic-auth username and password that will be used by the prototype
+
+    ```
+    cf set-env APP_NAME USERNAME username_here
+    cf set-env APP_NAME Password password_here
+    ```
+
+    If you have not done this, the prototype kit will warn you when you access it.
+
+6. Create a Github Action for automatic deployment
+
+    In terminal navigate to the root of your prototype code and from there create a `.gitub` directory and a sub-directory `workflows` and then a file called `main.yml`
+
+    <% code("shell") do %>mkdir .github/ && mkdir .github/workflows
+    touch .github/workflows/main.yml<% end %>
+
+    Open the main.yml file and add the follow block of text:
+
+    ```
+    name: Continuous Delivery
+
+    on:
+    push:
+        branches:
+        - master
+
+    jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+        - name: Install the CF CLI
+            run: |
+            wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
+            echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+            sudo apt-get update
+            sudo apt-get install -y cf-cli
+
+        - uses: actions/checkout@v1
+        - name: 'Setup Node'
+            uses: actions/setup-node@v1
+            with:
+            node-version: '10.x'
+        - run: npm install
+
+        - name: Deploy
+            env:
+            CF_USERNAME: ${{ secrets.CF_USERNAME }}
+            CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+            run: |
+            cf api https://api.london.cloud.service.gov.uk
+            cf auth
+            cf target -o national-lottery-heritage-fund -s sandbox
+            cf v3-apply-manifest -f manifest.yml
+            cf v3-zdt-push APP_NAME --wait-for-deploy-complete
+    ```
+
+    Replacing `APP_NAME` on the last line with the name of the application you created for this 
+
+    If you need it, there is addtional [documentation for GitHub actions](https://help.github.com/en/actions)
+
+6. Set the shared secret in the prototype's github repository settings. This enables the Github action to deploy to the GaaP space.
+
+    In your prototype Github repository go to `/settings/secrets/`
+
+    ![](images/gh_secret.png)
+
+    Click 'Add a new secret' for both your CloudFoundry username and password
+
+    Username name value is: `CF_USERNAME`
+
+    Password name value is: `CF_PASSWORD`
