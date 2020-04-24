@@ -1,0 +1,242 @@
+---
+title: Environments
+weight: 2
+---
+
+
+# Environments
+
+Information on how to create and manage the GOV.UK PaaS spaces that we use for test
+and production environments.  To create a space, and deploy an app from scratch,
+follow these steps in order.
+
+## Creating a new Rails Environment
+
+### Create a new space
+Begin a new environment by creating a new space with the following CF CLI command:
+
+```
+cf create-space SPACE_NAME
+```
+
+This command won’t use the new space as soon as you create it.
+To "target" the space, use the following command:
+
+```
+cf target –s SPACE_NAME
+```
+
+### Configuring your Rails app for the new space
+
+You need to match your Rails environment name to that on GOV.UK PaaS.
+e.g. ‘pre-production’ in Rails will be ‘pre-production’ in GOV.UK PaaS.
+
+To do this, you will need to:
+
+* Create a new file in config/environments, named after your new
+environment – e.g. for production ‘production.rb’ - contents of this
+file can be copied from a similar environment file and amended if/as necessary
+
+* Update config/secrets.yml to ensure that your new environment uses
+the SECRET_KEY_BASE environment variable – this can be copied from the existing
+configuration in this file
+
+* Update config/storage.yml to ensure that your new environment uses a
+related S3 bucket if necessary – this can be copied from the existing configuration in this file
+
+* Update config/webpacker.yml to ensure that your new environment will be picked
+up by Webpacker (it’ll default to production configuration if not)
+
+* Update Gemfile to ensure that any necessary Ruby gems are also being installed for your environment
+
+
+
+## Deploying a new application to a space
+
+Before deploying an application, ensure that all the services that the application
+needs has already been spun up. After that, you can set the environment variables
+and bind the services to the app.
+
+For each of these steps, more information exists in the GOV.UK PaaS documentation.
+
+### Create a database
+
+Our naming convention is using the same name for the app and database.
+
+We create a v11 postgres database with this command:
+
+```
+cf create-service postgres small-11 funding-frontend-research -c '{"enable_extensions": ["pgcrypto"]}'
+```
+
+This takes between 5 and 10 minutes to spin up. Check progress with:
+
+```
+cf services
+```
+
+### Creating Log Drain
+
+Our naming convention is to call the service "log-drain"
+
+Get the papertrail endpoint by logging info papertrail and going to
+settings, then log destinations.  From there you will see the paper trail
+[endpoint](https://papertrailapp.com/account/destinations )
+that log drain will need to hit.
+
+Then using CF CLI run this command:
+
+```
+cf create-user-provided-service log-drain -l syslog-tls://THE_PAPERTRAIL_ENDPOINT_PORT
+```
+
+The GOV.UK PaaS documentation refers to Logit rather than papertrail.  But any provider
+consuming Syslog protocol should work.
+
+More documentation here:<br>
+[GOV.UK PaaS](https://docs.cloud.service.gov.uk/monitoring_apps.html#configure-app)<br>
+[PaperTrail](https://help.papertrailapp.com/kb/hosting-services/cloud-foundry/)
+
+### Creating S3 Bucket
+
+Our naming convention is to use the same name as the app, with the suffix of "-uploads"
+
+If you are creating a test app in an existing test environment, you can use an existing S3
+bucket.
+
+But when you need a new S3 bucket, create a private bucket with this command:
+
+```
+cf create-service aws-s3-bucket default SERVICE_NAME
+```
+
+Further documentation at [GOV.UK PaaS](https://docs.cloud.service.gov.uk/deploying_services/s3/#provision-a-private-aws-s3-bucket)
+
+To connect to a new S3 bucket, you will need a [service key](#create-a-service-key).
+
+### Create a Service key
+
+The service key is needed to connect to a new S3 bucket from outside GOV.UK PaaS.
+[GOV.UK PaaS documentation](https://docs.cloud.service.gov.uk/deploying_services/s3/#connect-to-an-s3-bucket-from-outside-of-the-gov-uk-paas )
+
+Run this command where SERVICE_NAME is the S3 bucket. And SERVICE_KEY is **direct-upload**.
+
+```
+cf create-service-key SERVICE_NAME SERVICE_KEY -c '{"allow_external_access": true}'
+```
+The service key can be [checked afterwards](#check-a-service-key).
+
+### Check a Service Key
+We generally call SERVICE_KEY **direct-upload**
+
+```
+cf service-key APP_NAME SERVICE_KEY
+```
+
+### Set CORS Policy( Cross Origin resource sharing)
+This is required when setting up a new S3 bucket.
+
+Download an existing CORS policy template from [Sharepoint](https://hfund365.sharepoint.com/sites/DigitalServiceDesignTeam/_layouts/15/download.aspx?UniqueId=68011b41dd0545e5a6d627606490d850&e=gTfHv0).
+Amend the JSON for your app, then apply the policy with [AWS CLI](https://aws.amazon.com/cli/).
+To get BUCKET_NAME inspect the value for bucket_name by [checking the service key](#check-a-service-key)
+
+```
+aws s3api put-bucket-cors --bucket BUCKET_NAME --cors-configuration file://cors.json
+```
+
+### Create a redis cache
+
+Our naming convention is to use the same name as the app, with the suffix of "-redis-cache"
+
+```
+cf create-service redis tiny-3.2 APP_NAME-redis-cache
+```
+[GOV.UK PaaS documentation](https://docs.cloud.service.gov.uk/deploying_services/redis/)
+
+### Create an app
+
+```
+cf v3-create-app APP_NAME
+```
+
+### Create a manifest
+Examples already exist in [funding-frontend](https://github.com/heritagefund/funding-frontend/blob/master/manifest-staging.yml).
+The naming convention is "manifest-name-of-environment.yml"
+
+### Apply the manifest
+
+```
+cf v3-apply-manifest -f APP_MANIFEST_PATH
+```
+Next Push the app but don't start.
+
+The usual push command, will push *and* start the app.  At this stage the app will fall over
+because binding, schema loads and environments variables are not configured.
+
+Use **--no-start** to push the app without starting
+
+```
+cf v3-push APP_NAME --no-start
+```
+
+### Set environment variables
+
+For each environment variable run:
+
+```
+cf v3-set-env APP_NAME ENV_VAR_NAME ENV_VAR_VALUE
+```
+
+The easiest way to determine the environment variables that are required, is to
+check an existing app with:
+
+```
+cf env APPN_NAME
+```
+To get variables required to access the S3 bucket, [check the service key](#check-a-service-key)
+
+### Bind the app to its services
+For each service listed in the manifest run:
+
+```
+cf bind-service APP_NAME SERVICE_NAME
+```
+
+### Load database schema
+
+```
+cf run-task APP_NAME "bundle exec rake db:schema:load" --name load
+```
+
+### Start the app
+
+```
+cf v3-push APP_NAME
+```
+Cloud Foundry has a separate "start" command.  But this doesn't start with everything we need for the
+running container - such as environment variables.
+
+### Checking for errors:
+
+```
+cf logs APP-NAME -recent
+```
+
+## Setting up the app
+
+New team members need their email addresses whitelisted on gov.uk notify.  Sign into notify and add new team members there.
+
+### Populating tables
+Loading the database schema will not populate any tables.  Some data can be added with:
+
+```
+cf run-task funding-frontend-test "bundle exec rake db:seed" --name load
+```
+
+For Flipper tables:  A row can be added with:
+
+```
+ insert into flipper_gates (feature_key, key, value, created_at, updated_at) VALUES ('bau', 'boolean', 'true', now(), now());
+```
+
+
