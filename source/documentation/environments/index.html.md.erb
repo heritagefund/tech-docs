@@ -10,7 +10,7 @@ Information on how to create and manage the GOV.UK PaaS spaces that we use for t
 and production environments.  To create a space, and deploy an app from scratch,
 follow these steps in order.
 
-## Creating a new Rails Environment
+## Create a new Environment
 
 ### Create a new space
 Begin a new environment by creating a new space with the following CF CLI command:
@@ -191,7 +191,7 @@ The easiest way to determine the environment variables that are required, is to
 check an existing app with:
 
 ```
-cf env APPN_NAME
+cf env APP_NAME
 ```
 To get variables required to access the S3 bucket, [check the service key](#check-a-service-key)
 
@@ -219,7 +219,7 @@ running container - such as environment variables.
 ### Checking for errors:
 
 ```
-cf logs APP-NAME -recent
+cf logs APP-NAME --recent
 ```
 
 ## Setting up the app
