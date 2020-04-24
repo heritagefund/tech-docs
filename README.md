@@ -32,6 +32,9 @@ You can add content by editing the `.html.md.erb` files. These files support con
 
 👉 Learn more about [producing more complex page structures][multipage] for your website.
 
+The page content is held within the documentation folder.  Each folder within the documentation folder has 
+its own index.html.md.erb file, so the category shows in the left pane. 
+
 ## Preview your changes locally
 
 To preview your new website locally, navigate to your project folder and run:
