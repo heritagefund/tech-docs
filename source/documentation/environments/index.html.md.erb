@@ -93,8 +93,11 @@ cf create-user-provided-service log-drain -l syslog-tls://THE_PAPERTRAIL_ENDPOIN
 The GOV.UK PaaS documentation refers to Logit rather than papertrail.  But any provider
 consuming Syslog protocol should work.
 
-More documentation here:<br>
-[GOV.UK PaaS](https://docs.cloud.service.gov.uk/monitoring_apps.html#configure-app)<br>
+More documentation here:
+
+
+[GOV.UK PaaS](https://docs.cloud.service.gov.uk/monitoring_apps.html#configure-app)
+
 [PaperTrail](https://help.papertrailapp.com/kb/hosting-services/cloud-foundry/)
 
 ### Creating S3 Bucket
@@ -136,9 +139,13 @@ cf service-key APP_NAME SERVICE_KEY
 ### Set CORS Policy( Cross Origin resource sharing)
 This is required when setting up a new S3 bucket.
 
+Run ```aws configure``` with [AWS CLI](https://aws.amazon.com/cli/) and use the credentials for your service key
+
 Download an existing CORS policy template from Sharepoint.
 Amend the JSON for your app, then apply the policy with [AWS CLI](https://aws.amazon.com/cli/).
 To get BUCKET_NAME inspect the value for bucket_name by [checking the service key](#check-a-service-key)
+
+More information on [GOV.UK PaaS](https://docs.cloud.service.gov.uk/deploying_services/s3/#use-the-service)
 
 ```
 aws s3api put-bucket-cors --bucket BUCKET_NAME --cors-configuration file://cors.json
@@ -171,7 +178,7 @@ cf v3-apply-manifest -f APP_MANIFEST_PATH
 Next Push the app but don't start.
 
 The usual push command, will push *and* start the app.  At this stage the app will fall over
-because binding, schema loads and environments variables are not configured.
+because schema loads and environments variables are not configured.
 
 Use **--no-start** to push the app without starting
 
@@ -195,13 +202,6 @@ cf env APP_NAME
 ```
 To get variables required to access the S3 bucket, [check the service key](#check-a-service-key)
 
-### Bind the app to its services
-For each service listed in the manifest run:
-
-```
-cf bind-service APP_NAME SERVICE_NAME
-```
-
 ### Load database schema
 
 ```
@@ -216,10 +216,24 @@ cf v3-push APP_NAME
 Cloud Foundry has a separate "start" command.  But this doesn't start with everything we need for the
 running container - such as environment variables.
 
-### Checking for errors:
+### Checking for errors
 
 ```
 cf logs APP-NAME --recent
+```
+
+### Binding and unbinding services from apps
+
+If you want to temporarily bind and unbind services without using the manifest, use:
+
+```
+cf bind-service APP_NAME SERVICE_NAME
+```
+or
+
+
+```
+cf unbind-service APP_NAME SERVICE_NAME
 ```
 
 ## Setting up the app
