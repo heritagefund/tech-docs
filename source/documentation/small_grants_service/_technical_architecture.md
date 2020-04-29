@@ -3,4 +3,5 @@
 This page details the technical architecture which underpins the service.
 
 ## Component interaction diagram
-![](images/small-grants-architecture.png)
+*Note: this diagram is editable by opening in [draw.io](https://draw.io)*
+![](images/architecture.png)
