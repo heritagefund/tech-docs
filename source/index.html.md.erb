@@ -14,6 +14,91 @@ ensure that you do not add any sensitive information (keys, passwords, etc.)
 <%= partial 'partials/mermaid' %>
 
 <div class="mermaid">
-    graph LR
-        id
+classDiagram
+	Fish <|-- Duck
+	class Duck{
+		+String beakColor
+		+swim()
+		+quack()
+	}
+  	class Fish{
+		int sizeInFeet
+		canEat()
+	}
+		class Application{
+      id: UUID **PK**
+      declaration: Boolean
+      declaration_description: Text
+      declaration_keep_informed: Boolean
+      declaration_user_research: Boolean
+      project_reference_number: String
+      salesforce_case_id: String
+      salesforce_case_number: String
+      submitted_on: String
+      address: UUID **FK**
+      created_at: Timestamp
+      updated_at: Timestamp
+	}
+    class Outcome{
+      id: UUID **PK**
+      application_id: UUID **FK**
+      outcome: Integer **FK**
+      description: Text
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class OutcomeType{
+      id: Integer **FK**
+      name: String
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class Organisation{
+      id: UUID **PK**
+      name: String
+      org_type: Integer
+      company_number: String
+      charity_number: String
+      charity_number_ni: String
+      salesforce_account_id: String
+      address: UUID **FK**
+      created_at: Timestamp
+      updated_at Timestamp
+    }
+    class User{
+      id: UUID **PK**
+      person_id: UUID **FK**
+      organisation_id: UUID **FK**
+      email: String
+      encrypted_password: String
+      reset_password_token: String
+      reset_password_sent_at: Timestamp
+      remember_created_at: Timestamp
+      confirmation_token: String
+      confirmed_at: Timestamp
+      confirmation_sent_at: Timestamp
+      unconfirmed_email: String
+      created_at: Timestamp
+      updated_at : Timestamp
+    }
+    class Person{
+      id: UUID **PK**
+      name: String
+      date_of_birth: Date
+      email: String
+      phone_number: String
+      address: UUID **FK**
+      legal_signatory: Boolean
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class OrganisationType{
+      id: Integer **PK**
+      name: String
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+
+
+
 </div>
