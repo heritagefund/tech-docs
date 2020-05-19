@@ -15,26 +15,28 @@ ensure that you do not add any sensitive information (keys, passwords, etc.)
 
 <div class="mermaid">
 classDiagram
-  organisation ..> address
-  application ..> address
-  person ..> address
-  user ..> person
-  user ..> organisation
-  organisation ..> organisation_type
-  organisation_mission ..> organisation
-  mission ..> organisation_mission
-  outcome ..> application
-  outcome ..> outcome_type
-  application ..> organisation
-  volunteer ..> application
-  non_cash_contribution ..> application
-  cost ..> application
-  cost ..> cost_type
-  cash_contribution ..> application
-  cash_contribution ..> secured_type
-  supporting_evidence ..> application
-  grant_programme_sff_os ..> application
-  grant_programme_sff_os ..> permission_type
+
+  address_link ..> address : 1 to 1..*
+  application ..> address_link : 1 to 1
+  person ..> address_link : 1 to 1
+  organisation ..> address_link : 1 to 1
+  user ..> person : 1 to 1
+  user ..> organisation : 1 to 1..*
+  organisation ..> organisation_type: 1 to 1
+  organisation_mission ..> organisation: 1..* to 1
+  mission ..> organisation_mission : 1..* to 1
+  outcome ..> application : 1..* to 1
+  outcome ..> outcome_type : 1 to 1
+  application ..> organisation : 1..* to 1
+  volunteer ..> application : 0..* to 1
+  non_cash_contribution ..> application : 0..* to 1
+  cost ..> application : 1..* to 1
+  cost ..> cost_type : 1 to 1
+  cash_contribution ..> application : 0..* to 1
+  cash_contribution ..> secured_type : 1 to 1
+  supporting_evidence ..> application : 0..* to 1
+  grant_programme_sff_os ..> application : 0..1 to 1
+  grant_programme_sff_os ..> permission_type : 1 to 1
 
 
 		class application{
@@ -47,7 +49,7 @@ classDiagram
       salesforce_case_id: String
       salesforce_case_number: String
       submitted_on: String
-      address: UUID **FK**
+      address_link_id: UUID **FK**
       organisation: UUID **FK**
       created_at: Timestamp
       updated_at: Timestamp
@@ -74,7 +76,7 @@ classDiagram
       charity_number: String
       charity_number_ni: String
       salesforce_account_id: String
-      address: UUID **FK**
+      address_link_id: UUID **FK**
       created_at: Timestamp
       updated_at Timestamp
     }
@@ -100,7 +102,7 @@ classDiagram
       date_of_birth: Date
       email: String
       phone_number: String
-      address: UUID **FK**
+      address_link_id: UUID **FK**
       legal_signatory: Boolean
       created_at: Timestamp
       updated_at: Timestamp
@@ -181,6 +183,10 @@ classDiagram
       long: String
       created_at: Timestamp
       updated_at: Timestamp
+    }
+    class address_link{
+      address_link_id: UUID **PK**
+      address_id: UUID **FK**
     }
     class grant_programme_sff_os{
       id: UUID **PK**
