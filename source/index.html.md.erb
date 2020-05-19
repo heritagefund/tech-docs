@@ -25,7 +25,7 @@ classDiagram
 		int sizeInFeet
 		canEat()
 	}
-		class Application{
+		class application{
       id: UUID **PK**
       declaration: Boolean
       declaration_description: Text
@@ -39,7 +39,7 @@ classDiagram
       created_at: Timestamp
       updated_at: Timestamp
 	}
-    class Outcome{
+    class outcome{
       id: UUID **PK**
       application_id: UUID **FK**
       outcome: Integer **FK**
@@ -47,13 +47,13 @@ classDiagram
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class OutcomeType{
+    class outcome_type{
       id: Integer **FK**
       name: String
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class Organisation{
+    class organisation{
       id: UUID **PK**
       name: String
       org_type: Integer
@@ -65,7 +65,7 @@ classDiagram
       created_at: Timestamp
       updated_at Timestamp
     }
-    class User{
+    class user{
       id: UUID **PK**
       person_id: UUID **FK**
       organisation_id: UUID **FK**
@@ -81,7 +81,7 @@ classDiagram
       created_at: Timestamp
       updated_at : Timestamp
     }
-    class Person{
+    class person{
       id: UUID **PK**
       name: String
       date_of_birth: Date
@@ -92,13 +92,106 @@ classDiagram
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class OrganisationType{
+    class organisation_type{
       id: Integer **PK**
       name: String
       created_at: Timestamp
       updated_at: Timestamp
     }
-
-
-
+    class organisation_mission{
+      organisation_id: UUID **PK**
+      mission_id: UUID **PK**
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class volunteer{
+      id: UUID **PK**
+      application_id: UUID **FK**
+      hours: Integer
+      description: Text
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class non_cash_contribution{
+      id: UUID **PK**
+      application_id: UUID **FK**
+      amount: Float
+      description: Text
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class cash_contribution {
+      id: UUID **PK**
+      application_id: UUID **FK**
+      amount: Float
+      description: Text
+      secured: Integer
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class supporting_evidence {
+      id: UUID **PK**
+      application_id: UUID **FK**
+      description: Text
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class  mission{
+      id: Integer **PK**
+      name: String
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class secured_type{
+      id: Integer **PK**
+      name: String
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class cost_type{
+      id: Integer **PK**
+      name: String
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class address{
+      id: UUID **PK**
+      line1: String
+      line2: String
+      line3: String
+      townCity: String
+      County: Sting
+      postcode: String
+      udprn: String
+      lat: String
+      long: String
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class grant_programme_sff_os{
+      id: UUID **PK**
+      application_id: UUID **FK**
+      title: String
+      difference_description: Text
+      matter_description: Text
+      best_placed_description: Text
+      capital_work: Boolean
+      involvement_description: Text
+      heritage_description: Text
+      description: Text
+      start_date: Date
+      end_date: Date
+      is_partnership: Boolean
+      partnership_details: Text
+      permission_type: id
+      permission_description: Text
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class permission_type {
+      id: Integer **PK**
+      name: String
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
 </div>
