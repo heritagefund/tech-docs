@@ -18,15 +18,16 @@ classDiagram
 
   address_link ..> address : 1 to 1..*
   application ..> address_link : 1 to 1
+  grant_programme_sff_os ..> application : 0..1 to 1
   person ..> address_link : 1 to 1
   organisation ..> address_link : 1 to 1
-  user ..> person : 1 to 1
   user ..> organisation : 1 to 1..*
   organisation ..> organisation_type: 1 to 1
   organisation_mission ..> organisation: 1..* to 1
-  mission ..> organisation_mission : 1..* to 1
-  outcome ..> application : 1..* to 1
+  user ..> person : 1 to 1
+  mission ..> organisation_mission : 0..* to 1
   outcome ..> outcome_type : 1 to 1
+  outcome ..> application : 1..* to 1
   application ..> organisation : 1..* to 1
   volunteer ..> application : 0..* to 1
   non_cash_contribution ..> application : 0..* to 1
@@ -35,7 +36,6 @@ classDiagram
   cash_contribution ..> application : 0..* to 1
   cash_contribution ..> secured_type : 1 to 1
   supporting_evidence ..> application : 0..* to 1
-  grant_programme_sff_os ..> application : 0..1 to 1
   grant_programme_sff_os ..> permission_type : 1 to 1
 
 
@@ -114,8 +114,16 @@ classDiagram
       updated_at: Timestamp
     }
     class organisation_mission{
-      mission_id: UUID **PK**
+      id : UUID **PK*
+      mission_id: UUID **FK**
       organisation_id: UUID **FK**
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class mission{
+      id: Integer **PK**
+      organision_mission_id: UUID **FK**
+      name: String
       created_at: Timestamp
       updated_at: Timestamp
     }
@@ -140,7 +148,7 @@ classDiagram
       application_id: UUID **FK**
       amount: Float
       description: Text
-      secured_type: Integer
+      secured_type_id: Integer
       created_at: Timestamp
       updated_at: Timestamp
     }
@@ -151,18 +159,20 @@ classDiagram
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class  mission{
-      id: Integer **PK**
-      organision_mission_id: UUID **FK**
-      name: String
-      created_at: Timestamp
-      updated_at: Timestamp
-    }
     class secured_type{
       id: Integer **PK**
       name: String
       created_at: Timestamp
       updated_at: Timestamp
+    }
+    class cost{
+      id: UUID **PK**
+      application_id: UUID **FK**
+      cost_type: Integer **FK**
+      amount: Float
+      description: Text
+      created_at : Timestamp
+      updated_at : Timestamp
     }
     class cost_type{
       id: Integer **PK**
@@ -185,8 +195,9 @@ classDiagram
       updated_at: Timestamp
     }
     class address_link{
-      address_link_id: UUID **PK**
+      id: UUID **PK**
       address_id: UUID **FK**
+      owner_id: UUID **FK**
     }
     class grant_programme_sff_os{
       id: UUID **PK**
