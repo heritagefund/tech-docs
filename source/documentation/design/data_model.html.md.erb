@@ -1,0 +1,232 @@
+---
+title: Design
+weight: 2
+---
+
+# Proposed data model
+
+This is data model we will aim for.  Its designed to accommodate new business
+cases as quickly and easily as possible.
+
+<%= partial 'partials/mermaid' %>
+
+<div class="mermaid">
+classDiagram
+
+  address_link ..> address : 1 to 1..*
+  application ..> address_link : 1 to 1
+  grant_programme_sff_os ..> application : 0..1 to 1
+  person ..> address_link : 1 to 1
+  organisation ..> address_link : 1 to 1
+  user ..> user_organisation : 1 to 1..*
+  user_organisation ..> organisation : 1 to 1
+  organisation ..> organisation_type: 1 to 1
+  organisation_mission ..> organisation: 1..* to 1
+  user ..> person : 1 to 1
+  mission ..> organisation_mission : 0..* to 1
+  outcome ..> outcome_type : 1 to 1
+  outcome ..> application : 1..* to 1
+  application ..> organisation : 1..* to 1
+  volunteer ..> application : 0..* to 1
+  non_cash_contribution ..> application : 0..* to 1
+  cost ..> application : 1..* to 1
+  cost ..> cost_type : 1 to 1
+  cash_contribution ..> application : 0..* to 1
+  cash_contribution ..> secured_type : 1 to 1
+  supporting_evidence ..> application : 0..* to 1
+  grant_programme_sff_os ..> permission_type : 1 to 1
+
+
+   class application{
+      id: UUID **PK**
+      declaration: Boolean
+      declaration_description: Text
+      declaration_keep_informed: Boolean
+      declaration_user_research: Boolean
+      project_reference_number: String
+      salesforce_case_id: String
+      salesforce_case_number: String
+      submitted_on: String
+      address_link_id: UUID **FK**
+      organisation: UUID **FK**
+      created_at: Timestamp
+      updated_at: Timestamp
+	}
+    class outcome{
+      id: UUID **PK**
+      application_id: UUID **FK**
+      outcome_type: Integer **FK**
+      description: Text
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class outcome_type{
+      id: Integer **FK**
+      name: String
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class organisation{
+      id: UUID **PK**
+      name: String
+      org_type: Integer
+      company_number: String
+      charity_number: String
+      charity_number_ni: String
+      salesforce_account_id: String
+      address_link_id: UUID **FK**
+      created_at: Timestamp
+      updated_at Timestamp
+    }
+    class user_organisation{
+    id: UUID **PK**
+    owner_id: UUID **FK**
+    organisation_id: UUID **FK**
+    }
+    class user{
+      id: UUID **PK**
+      person_id: UUID **FK**
+      organisation_id: UUID **FK**
+      email: String
+      encrypted_password: String
+      reset_password_token: String
+      reset_password_sent_at: Timestamp
+      remember_created_at: Timestamp
+      confirmation_token: String
+      confirmed_at: Timestamp
+      confirmation_sent_at: Timestamp
+      unconfirmed_email: String
+      created_at: Timestamp
+      updated_at : Timestamp
+    }
+    class person{
+      id: UUID **PK**
+      name: String
+      date_of_birth: Date
+      email: String
+      phone_number: String
+      address_link_id: UUID **FK**
+      legal_signatory: Boolean
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class organisation_type{
+      id: Integer **PK**
+      name: String
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class organisation_mission{
+      id : UUID **PK*
+      mission_id: UUID **FK**
+      organisation_id: UUID **FK**
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class mission{
+      id: Integer **PK**
+      organision_mission_id: UUID **FK**
+      name: String
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class volunteer{
+      id: UUID **PK**
+      application_id: UUID **FK**
+      hours: Integer
+      description: Text
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class non_cash_contribution{
+      id: UUID **PK**
+      application_id: UUID **FK**
+      amount: Float
+      description: Text
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class cash_contribution {
+      id: UUID **PK**
+      application_id: UUID **FK**
+      amount: Float
+      description: Text
+      secured_type_id: Integer
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class supporting_evidence {
+      id: UUID **PK**
+      application_id: UUID **FK**
+      description: Text
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class secured_type{
+      id: Integer **PK**
+      name: String
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class cost{
+      id: UUID **PK**
+      application_id: UUID **FK**
+      cost_type: Integer **FK**
+      amount: Float
+      description: Text
+      created_at : Timestamp
+      updated_at : Timestamp
+    }
+    class cost_type{
+      id: Integer **PK**
+      name: String
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class address{
+      id: UUID **PK**
+      line1: String
+      line2: String
+      line3: String
+      townCity: String
+      County: Sting
+      postcode: String
+      udprn: String
+      lat: String
+      long: String
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class address_link{
+      id: UUID **PK**
+      address_id: UUID **FK**
+      owner_id: UUID **FK**
+    }
+    class grant_programme_sff_os{
+      id: UUID **PK**
+      application_id: UUID **FK**
+      title: String
+      difference_description: Text
+      matter_description: Text
+      best_placed_description: Text
+      capital_work: Boolean
+      involvement_description: Text
+      heritage_description: Text
+      description: Text
+      start_date: Date
+      end_date: Date
+      is_partnership: Boolean
+      partnership_details: Text
+      permission_type: id
+      permission_description: Text
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class permission_type {
+      id: Integer **PK**
+      name: String
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+
+</div>
