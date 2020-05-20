@@ -13,20 +13,20 @@ cases as quickly and easily as possible.
 <div class="mermaid">
 classDiagram
 
-  address_link ..> address : 1 to 1..*
-  application ..> address_link : 1 to 1
+  address_link ..> address : 1 to 1
+  application ..> address_link : 1 to 1..*
   grant_programme_sff_os ..> application : 0..1 to 1
-  person ..> address_link : 1 to 1
-  organisation ..> address_link : 1 to 1
+  person ..> address_link : 1 to 1..*
+  organisation ..> address_link : 1 to 1..*
   user ..> user_organisation : 1 to 1..*
   user_organisation ..> organisation : 1 to 1
   organisation ..> organisation_type: 1 to 1
   organisation_mission ..> organisation: 1..* to 1
-  user ..> person : 1 to 1
+  user ..> person : 0..1 to 1
   mission ..> organisation_mission : 0..* to 1
   outcome ..> outcome_type : 1 to 1
   outcome ..> application : 1..* to 1
-  application ..> organisation : 1..* to 1
+  application ..> organisation : 0..* to 1
   volunteer ..> application : 0..* to 1
   non_cash_contribution ..> application : 0..* to 1
   cost ..> application : 1..* to 1
