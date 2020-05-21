@@ -61,7 +61,7 @@ classDiagram
       updated_at: Timestamp
     }
     class outcome_type{
-      id: Integer **FK**
+      id: Integer **PK**
       name: String
       created_at: Timestamp
       updated_at: Timestamp
@@ -80,7 +80,7 @@ classDiagram
     }
     class user_organisation{
     id: UUID **PK**
-    owner_id: UUID **FK**
+    user_id: UUID **FK**
     organisation_id: UUID **FK**
     }
     class user{
@@ -118,7 +118,6 @@ classDiagram
     }
     class organisation_mission{
       id : UUID **PK*
-      mission_id: UUID **FK**
       organisation_id: UUID **FK**
       created_at: Timestamp
       updated_at: Timestamp
@@ -207,10 +206,9 @@ classDiagram
       application_id: UUID **FK**
       title: String
       difference_description: Text
-      matter_description: Text
+      community_description: Text
       best_placed_description: Text
       capital_work: Boolean
-      involvement_description: Text
       heritage_description: Text
       description: Text
       start_date: Date
