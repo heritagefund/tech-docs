@@ -15,6 +15,7 @@ classDiagram
 
   address_link ..> address : 1 to 1
   application ..> address_link : 1 to 1..*
+  person_application ..> application : 0..* to 1
   grant_programme_sff_os ..> application : 0..1 to 1
   person ..> address_link : 1 to 1..*
   organisation ..> address_link : 1 to 1..*
@@ -35,6 +36,11 @@ classDiagram
   cash_contribution ..> secured_type : 1 to 1
   supporting_evidence ..> application : 0..* to 1
   grant_programme_sff_os ..> permission_type : 1 to 1
+  person_application ..> person : 1 to 1
+  person_application ..> relationship_type : 1 to 1
+  person_declaration_link ..> person : 0..* to 1
+  person_declaration_link ..> application_declarations
+  application_declarations ..> declarations
 
 
    class application{
@@ -220,11 +226,36 @@ classDiagram
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class permission_type {
+    class permission_type{
       id: Integer **PK**
       name: String
       created_at: Timestamp
       updated_at: Timestamp
+    }
+    class person_application{
+      id: Integer **PK**
+      person_id: UUID **FK**
+      application_id: UUID **FK**
+      relationship: Integer **FK*
+    }
+    class person_declaration_link{
+      id: UUID **FK**
+      person_id: UUID **FK**
+      application_declaration_id: UUID **FK*
+     }
+    class relationship_type{
+      id: integer **PK**
+      name: String
+    }
+    class application_declarations{
+      id: UUID **PK**
+      application_id: UUID **FK**
+      declaration_id: UUID **FK**
+    }
+    class declarations{
+      id: UUID **PK**
+      name: String
+      json: JSONB
     }
 
 </div>
