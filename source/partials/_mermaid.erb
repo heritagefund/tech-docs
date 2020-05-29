@@ -1,2 +1,15 @@
 <script type="text/javascript" src="https://unpkg.com/mermaid@8.5.1/dist/mermaid.min.js"></script>
-<script>mermaid.initialize({startOnLoad:true});</script>
+
+
+<script>
+    var mermaid_config = {
+        startOnLoad:true,
+        flowchart:{
+            useMaxWidth:true,
+            htmlLabels:true,
+            curve:'cardinal',
+        },
+        securityLevel:'loose',
+    };
+    mermaid.initialize(mermaid_config);
+</script>
