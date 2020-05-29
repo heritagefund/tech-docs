@@ -1,0 +1,202 @@
+---
+title: Design
+weight: 2
+---
+
+<%= partial 'partials/mermaid' %>
+
+# Architecture
+
+## Introduction
+
+At the moment all of our code sits in a Rails monolith.  This works
+suits a small development team and provides a means to apply for small
+grants.
+
+Moving forward we want to morph this into a more evolutionary architecture
+to support emerging needs.
+
+To do this we will reduce coupling and increase compartmentalization.
+
+At the time of writing, The second or third architecture proposals appear
+most suitable.
+
+## First proposed architecture revision.
+
+Continue to use the Rails monolith, but apply the [proposed data model](data_model.html#proposed-data-model).
+In addition group non-common models, views, controllers and automated tests
+for small grants into their own directories.
+
+This will mean that new programmes can be added in *their* distinct directories.
+When appropriate, decomposing in this structured way will make it easier to lift
+these assets into their own services - rather than picking the monolith apart.
+
+It will also be less risky to add new funding programmes, as code for
+existing funding programmes can be affected as little as possible.
+
+There are also advantages to retaining a monolith, while the number
+of programmes is small. DevOps overhead is low which benefits a small
+development team.  This means more effort can be focused on feature
+development.
+
+The disadvantages of a monolith could arise when we are running a lot of
+different programmes.  The monolith could become large, complex,
+hard to navigate and difficult to introduce to new developers. Running
+an extensive automated test suite could be very time consuming.  And if the
+development team expands - developers could be blocked by each other.
+
+
+## Second proposed architecture revision.
+<div class="mermaid">
+graph TD
+    LP(Landing page)
+    PFA(Programme A frontend)
+    PFB(Programme B frontend)
+    RM[Rails monolith API]
+    DB[(Database tables)]
+
+    LP==>PFA
+    LP==>PFB
+    PFA==>RM
+    PFB==>RM
+    RM==>DB
+</div>
+
+Split out frontend code.  Initially an Applicant could hit a landing page
+with common features like login.
+
+After that the applicant will go to the relevant programme.
+
+Each programme frontend will point to the same Rails API.  This Rails
+API will still be a monolith as it orchestrates all the
+logic for each programme and is responsible for all the database
+migrations and storage.
+But is much smaller with the frontend assets removed.
+
+This architecture revision makes it easier for the team to work on
+distinct pieces of work without interfering with each other.
+
+Testing (manual and automated) can be further decomposed into each
+application.
+
+Individual frontends can be spun up and decommissioned with less risk
+to the others.
+
+There will be a much higher DevOps overhead to maintain
+a more sophisticated infrastructure and a greater number of applications
+(potential points of failure).
+
+
+## Third proposed architecture revision.
+<div class="mermaid">
+graph TD
+    LP(Landing page)
+    PFA(Programme A frontend)
+    PFB(Programme B frontend)
+    PFC(Programme C frontend)
+    RM[Rails API]
+    PMA(Programme A microservice)
+    PMB(Programme B microservice)
+    PMC(Programme C microservice)
+    DBA[(Programme A tables)]
+    DBB[(Programme B tables)]
+    DBC[(Programme C tables)]
+    DBCommon[(Common tables)]
+
+    LP==>PFA
+    LP==>PFB
+    LP==>PFC
+    PFA==>RM
+    PFB==>RM
+    PFC==>RM
+    RM==>DBCommon
+    RM==>PMA
+    RM==>PMB
+    RM==>PMC
+    PMA==>DBA
+    PMB==>DBB
+    PMC==>DBC
+
+</div>
+
+This builds on the [second proposed architecture revision](#second-proposed-architecture-revision).
+
+As more programmes are added, the rails monolith could become
+unwieldy.  To mitigate this, use the single responsibility principle
+to further decompose specific programme orchestration and persistence
+logic into distinct microservices.
+
+The Rails monolith would retain responsibility for orchestrating
+and persisting things common to each programme
+(and the name would be changed).
+
+The benefits match those described in seen in the
+[second proposed architecture revision](#second-proposed-architecture-revision),
+with a greater number of programmes could be supported.
+
+However, the number of services has increased greatly.  This presents
+considerations such as:
+
+- Robustness and resilience when communicating over a network.
+- Traceability across services.
+- Collating readable logs for each service to describe an application.
+- Security considerations for many more applications.
+- Monitoring more applications.
+- Versioning of these applications.
+
+This team has the technical experience to address these issues, but
+a much larger part of development resource will be devoted to coding
+and maintaining this infrastructure.
+
+## Moving to a full microservice architecture.
+<div class="mermaid">
+graph TD
+    LP(Landing page)
+    PFA(Programme A frontend)
+    PFB(Programme B frontend)
+    PFC(Programme C frontend)
+    OAPI[Orchestration API]
+    AppM(Application microservice)
+    AddM(Address microservice)
+    OthM(Other microservices)
+    PMA(Programme A microservice)
+    PMB(Programme B microservice)
+    PMC(Programme C microservice)
+    DBA[(Programme A tables)]
+    DBB[(Programme B tables)]
+    DBC[(Programme C tables)]
+    DBApp[(application table)]
+    DBAdd[(address table)]
+    DBOth[(other tables)]
+
+    LP==>PFA
+    LP==>PFB
+    LP==>PFC
+    PFA==>OAPI
+    PFB==>OAPI
+    PFC==>OAPI
+    OAPI==>PMA
+    OAPI==>PMB
+    OAPI==>PMC
+    OAPI==>AppM
+    OAPI==>AddM
+    OAPI==>OthM
+    PMA==>DBA
+    PMB==>DBB
+    PMC==>DBC
+    OthM==>DBOth
+    AddM==>DBAdd
+    AppM==>DBApp
+</div>
+
+This evolutionary architecture is ideal for supporting emerging
+requirements.  Provided it is backed with a quality infrastructure
+and adequate DevOps capacity.
+
+("Other microservices" represents the many other microservices
+handling a single area of responsibility.)
+
+
+Although a theoretical ideal, this level of decomposition may not
+be pragmatic. It can actually hinder development time, when a small change
+affects multiple services.
