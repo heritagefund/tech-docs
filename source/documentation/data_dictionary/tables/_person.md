@@ -10,7 +10,6 @@ date_of_birth: Date
 email: String
 phone_number: String
 address_link_id: UUID <<FK>>        See address_link table.  A person can have more than one address.
-legal_signatory: Boolean            Whether the person is a legal signatory
 created_at: Timestamp
 updated_at: Timestamp
 ```
