@@ -1,4 +1,4 @@
-##person_application
+## person_application
 
 Links an application to a person.  Also records the purpose of that
 relationship, such as legal signatory.  
