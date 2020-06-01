@@ -13,35 +13,35 @@ cases as quickly and easily as possible.
 <div class="mermaid">
 classDiagram
 
-  address_link ..> address : 1 to 1
-  application ..> address_link : 1 to 1..*
-  person_application ..> application : 0..* to 1
-  grant_programme_sff_os ..> application : 0..1 to 1
-  person ..> address_link : 1 to 1..*
-  organisation ..> address_link : 1 to 1..*
-  user ..> user_organisation : 1 to 1..*
-  user_organisation ..> organisation : 1 to 1
-  organisation ..> organisation_type: 1 to 1
-  organisation_mission ..> organisation: 1..* to 1
-  user ..> person : 0..1 to 1
-  mission ..> organisation_mission : 0..* to 1
-  outcome ..> outcome_type : 1 to 1
-  outcome ..> application : 1..* to 1
-  application ..> organisation : 0..* to 1
-  volunteer ..> application : 0..* to 1
-  non_cash_contribution ..> application : 0..* to 1
-  cost ..> application : 1..* to 1
-  cost ..> cost_type : 1 to 1
-  cash_contribution ..> application : 0..* to 1
-  cash_contribution ..> secured_type : 1 to 1
-  supporting_evidence ..> application : 0..* to 1
-  grant_programme_sff_os ..> permission_type : 1 to 1
-  person_application ..> person : 1 to 1
-  person_application ..> relationship_type : 1 to 1
-  person_declaration_link ..> person : 0..* to 1
-  person_declaration_link ..> application_declarations
-  application_declarations ..> declarations
-
+    application ..> organisation : 0..* to 1
+    application ..> address_link : 1 to 1..*
+    user ..> user_organisation : 1 to 1..*
+    user ..> person : 0..1 to 1
+    user_organisation ..> organisation : 1 to 1
+    person ..> address_link : 1 to 1..*
+    person_application ..> application : 0..* to 1
+    person_declaration ..> person : 0..* to 1
+    person_declaration ..> declarations : 1 to 1
+    person_application ..> person : 1 to 1
+    person_application ..> relationship_type : 1 to 1
+    application_declarations ..> application : 0..* to 1
+    application_declarations ..> declarations : 1 to 1
+    address_link ..> address : 1 to 1
+    organisation ..> address_link : 1 to 1..*
+    organisation ..> organisation_type: 1 to 1
+    organisation_mission ..> organisation: 1..* to 1
+    mission ..> organisation_mission : 0..* to 1
+    outcome ..> outcome_type : 1 to 1
+    outcome ..> application : 1..* to 1
+    cost ..> application : 1..* to 1
+    cost ..> cost_type : 1 to 1
+    cash_contribution ..> application : 0..* to 1
+    cash_contribution ..> secured_type : 1 to 1
+    grant_programme_sff_os ..> application : 0..1 to 1
+    grant_programme_sff_os ..> permission_type : 1 to 1
+    non_cash_contribution ..> application : 0..* to 1
+    volunteer ..> application : 0..* to 1
+    supporting_evidence ..> application : 0..* to 1
 
    class application{
       id: UUID **PK**
@@ -112,7 +112,6 @@ classDiagram
       email: String
       phone_number: String
       address_link_id: UUID **FK**
-      legal_signatory: Boolean
       created_at: Timestamp
       updated_at: Timestamp
     }
@@ -238,24 +237,24 @@ classDiagram
       application_id: UUID **FK**
       relationship: Integer **FK*
     }
-    class person_declaration_link{
+    class person_declaration{
       id: UUID **FK**
       person_id: UUID **FK**
-      application_declaration_id: UUID **FK*
+      declaration_id: UUID **FK*
      }
     class relationship_type{
       id: integer **PK**
       name: String
+    }
+    class declarations{
+      id: UUID **PK**
+      declaration_type: String
+      json: JSONB
+      version: integer
     }
     class application_declarations{
       id: UUID **PK**
       application_id: UUID **FK**
       declaration_id: UUID **FK**
     }
-    class declarations{
-      id: UUID **PK**
-      name: String
-      json: JSONB
-    }
-
 </div>
