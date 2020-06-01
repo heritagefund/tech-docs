@@ -236,25 +236,35 @@ classDiagram
       person_id: UUID **FK**
       application_id: UUID **FK**
       relationship: Integer **FK*
+      created_at: Timestamp
+      updated_at: Timestamp
     }
     class person_declaration{
       id: UUID **PK**
       person_id: UUID **FK**
       declaration_id: UUID **FK*
+      created_at: Timestamp
+      updated_at: Timestamp
      }
     class relationship_type{
       id: integer **PK**
       name: String
+      created_at: Timestamp
+      updated_at: Timestamp
     }
     class declarations{
       id: UUID **PK**
       declaration_type: String
       json: JSONB
       version: integer
+      created_at: Timestamp
+      updated_at: Timestamp
     }
     class application_declarations{
       id: UUID **PK**
       application_id: UUID **FK**
       declaration_id: UUID **FK**
+      created_at: Timestamp
+      updated_at: Timestamp
     }
 </div>

@@ -1,6 +1,6 @@
 ## application_declaration
 
-Records the links between an applications and its declarations.
+Records the links between an application and its declarations.
 In some cases the declarations can be linked to an application 
 using the implicit 'person' links.  However, this becomes
 complicated if the User spans applications.
