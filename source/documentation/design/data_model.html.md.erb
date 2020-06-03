@@ -14,33 +14,33 @@ cases as quickly and easily as possible.
 classDiagram
 
     funding_applications ..> organisations : 0..* to 1
-    funding_applications ..> funding_applications_addresses : 1 to 1..*
-    users ..> user_organisations : 1 to 1..*
+    funding_applications <.. funding_applications_addresses : 1..* to 1
     users ..> persons : 0..1 to 1
+    users ..> user_organisations : 1 to 1..*
     user_organisations ..> organisations : 1 to 1
-    persons ..> persons_addresses : 1 to 1..*
+    persons <.. persons_addresses : 1..* to 1
     person_applications ..> funding_applications : 0..* to 1
-    person_declarations ..> persons : 0..* to 1
     person_declarations ..> declarations : 1 to 1
-    person_applications ..> persons : 1 to 1
+    person_declarations ..> persons : 0..* to 1
     person_applications ..> relationship_types : 1 to 1
+    person_applications ..> persons : 1 to 1
     funding_application_declarations ..> funding_applications : 0..* to 1
     funding_application_declarations ..> declarations : 1 to 1
     funding_applications_addresses ..> addresses : 1 to 1
     organisations_addresses ..> addresses : 1 to 1
     persons_addresses ..> addresses : 1 to 1
-    organisations ..> organisations_addresses : 1 to 1..*
+    organisations <.. organisations_addresses : 1..* to 1
     organisations ..> organisation_types: 1 to 1
     organisation_missions ..> organisations: 1..* to 1
     missions ..> organisation_missions : 0..* to 1
     outcomes..> outcome_types : 1 to 1
     outcomes..> funding_applications : 1..* to 1
-    costs ..> funding_applications : 1..* to 1
     costs ..> cost_types : 1 to 1
-    cash_contributions ..> funding_applications : 0..* to 1
+    costs ..> funding_applications : 1..* to 1
     cash_contributions ..> secured_types : 1 to 1
-    small_sff_grant_programmes ..> funding_applications : 0..1 to 1
+    cash_contributions ..> funding_applications : 0..* to 1
     small_sff_grant_programmes ..> permission_types : 1 to 1
+    small_sff_grant_programmes ..> funding_applications : 0..1 to 1
     non_cash_contributions ..> funding_applications : 0..* to 1
     volunteers ..> funding_applications : 0..* to 1
     supporting_evidences ..> funding_applications : 0..* to 1
