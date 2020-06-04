@@ -1,6 +1,6 @@
-##applications
+##funding applications
 
-Table that contains details specific to an application.
+Table that contains details specific to a funding application.
 
 ```
 id: UUID <<PK>>                         
