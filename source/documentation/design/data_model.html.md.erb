@@ -39,11 +39,11 @@ classDiagram
     costs ..> funding_applications : 1..* to 1
     cash_contributions ..> secured_types : 1 to 1
     cash_contributions ..> funding_applications : 0..* to 1
-    small_sff_grant_programmes ..> permission_types : 1 to 1
-    small_sff_grant_programmes ..> funding_applications : 0..1 to 1
+    grant_programme_sff_small ..> permission_types : 1 to 1
+    grant_programme_sff_small ..> funding_applications : 0..1 to 1
     non_cash_contributions ..> funding_applications : 0..* to 1
     volunteers ..> funding_applications : 0..* to 1
-    supporting_evidences ..> funding_applications : 0..* to 1
+    supporting_evidence ..> funding_applications : 0..* to 1
 
    class funding_applications{
       id: UUID **PK**
@@ -158,7 +158,7 @@ classDiagram
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class supporting_evidences{
+    class supporting_evidence{
       id: UUID **PK**
       application_id: UUID **FK**
       description: Text
@@ -200,7 +200,7 @@ classDiagram
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class small_sff_grant_programmes{
+    class grant_programme_sff_small{
       id: UUID **PK**
       application_id: UUID **FK**
       title: String

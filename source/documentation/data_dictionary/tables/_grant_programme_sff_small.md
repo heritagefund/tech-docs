@@ -1,4 +1,4 @@
-## small_sff_grant_programmes
+## grant_programme_sff_small
 
 Table told hold information specific to
 "small strategic funding framework grant programmes".

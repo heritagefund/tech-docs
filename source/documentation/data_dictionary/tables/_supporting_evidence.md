@@ -1,4 +1,4 @@
-## supporting_evidences
+## supporting_evidence
 
 Records the evidence that supports an application
 
