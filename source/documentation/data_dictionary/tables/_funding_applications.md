@@ -4,7 +4,7 @@ Table that contains details specific to an application.
 
 ```
 id: UUID <<PK>>                         
-declaration: Boolean                        records that decalration has been accepted
+declaration: Boolean                        records that declaration has been accepted
 declaration_description: Text               records applicant's permission to use certain info.
 declaration_keep_informed: Boolean          records that we can inform applicant
 declaration_user_research: Boolean          Agreed to User Research
