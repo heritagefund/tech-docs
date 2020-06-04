@@ -10,7 +10,7 @@ declaration_keep_informed: Boolean          records that we can inform applicant
 declaration_user_research: Boolean          Agreed to User Research
 project_reference_number: String            Salesforce project reference number
 salesforce_case_id: String                  Case ID in Salesforce
-salesforce_case_number: String              Case Number is Salesforce
+salesforce_case_number: String              Case Number in Salesforce
 submitted_on: String                        Date the application was submitted
 organisation: UUID <<FK>>                   Link to organisation table
 created_at: Timestamp
