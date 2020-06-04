@@ -1,8 +1,11 @@
 ## declarations
 
-Records a declaration as JSONB, so it is searchable.  
+Records a declaration as JSON.  
 When a declaration is revised, or a new declaration added, 
 then a new row will be added to this table.
+
+JSONB considered, but no expectations for extensive
+searching within the JSON.
 
 ```
   id: UUID <<PK>>
