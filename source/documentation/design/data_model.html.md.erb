@@ -13,37 +13,39 @@ cases as quickly and easily as possible.
 <div class="mermaid">
 classDiagram
 
-    application ..> organisation : 0..* to 1
-    application ..> address_link : 1 to 1..*
-    user ..> user_organisation : 1 to 1..*
-    user ..> person : 0..1 to 1
-    user_organisation ..> organisation : 1 to 1
-    person ..> address_link : 1 to 1..*
-    person_application ..> application : 0..* to 1
-    person_declaration ..> person : 0..* to 1
-    person_declaration ..> declarations : 1 to 1
-    person_application ..> person : 1 to 1
-    person_application ..> relationship_type : 1 to 1
-    application_declarations ..> application : 0..* to 1
-    application_declarations ..> declarations : 1 to 1
-    address_link ..> address : 1 to 1
-    organisation ..> address_link : 1 to 1..*
-    organisation ..> organisation_type: 1 to 1
-    organisation_mission ..> organisation: 1..* to 1
-    mission ..> organisation_mission : 0..* to 1
-    outcome ..> outcome_type : 1 to 1
-    outcome ..> application : 1..* to 1
-    cost ..> application : 1..* to 1
-    cost ..> cost_type : 1 to 1
-    cash_contribution ..> application : 0..* to 1
-    cash_contribution ..> secured_type : 1 to 1
-    grant_programme_sff_os ..> application : 0..1 to 1
-    grant_programme_sff_os ..> permission_type : 1 to 1
-    non_cash_contribution ..> application : 0..* to 1
-    volunteer ..> application : 0..* to 1
-    supporting_evidence ..> application : 0..* to 1
+    funding_applications ..> organisations : 0..* to 1
+    funding_applications <.. funding_applications_addresses : 1..* to 1
+    users ..> persons : 0..1 to 1
+    users ..> user_organisations : 1 to 1..*
+    user_organisations ..> organisations : 1 to 1
+    persons <.. persons_addresses : 1..* to 1
+    person_applications ..> funding_applications : 0..* to 1
+    person_declarations ..> declarations : 1 to 1
+    person_declarations ..> persons : 0..* to 1
+    person_applications ..> relationship_types : 1 to 1
+    person_applications ..> persons : 1 to 1
+    funding_application_declarations ..> funding_applications : 0..* to 1
+    funding_application_declarations ..> declarations : 1 to 1
+    funding_applications_addresses ..> addresses : 1 to 1
+    organisations_addresses ..> addresses : 1 to 1
+    persons_addresses ..> addresses : 1 to 1
+    organisations <.. organisations_addresses : 1..* to 1
+    organisations ..> organisation_types: 1 to 1
+    organisation_missions ..> organisations: 1..* to 1
+    missions ..> organisation_missions : 0..* to 1
+    outcomes..> outcome_types : 1 to 1
+    outcomes..> funding_applications : 1..* to 1
+    costs ..> cost_types : 1 to 1
+    costs ..> funding_applications : 1..* to 1
+    cash_contributions ..> secured_types : 1 to 1
+    cash_contributions ..> funding_applications : 0..* to 1
+    grant_programme_sff_small ..> permission_types : 1 to 1
+    grant_programme_sff_small ..> funding_applications : 0..1 to 1
+    non_cash_contributions ..> funding_applications : 0..* to 1
+    volunteers ..> funding_applications : 0..* to 1
+    supporting_evidence ..> funding_applications : 0..* to 1
 
-   class application{
+   class funding_applications{
       id: UUID **PK**
       declaration: Boolean
       declaration_description: Text
@@ -53,12 +55,11 @@ classDiagram
       salesforce_case_id: String
       salesforce_case_number: String
       submitted_on: String
-      address_link_id: UUID **FK**
       organisation: UUID **FK**
       created_at: Timestamp
       updated_at: Timestamp
 	}
-    class outcome{
+    class outcomes{
       id: UUID **PK**
       application_id: UUID **FK**
       outcome_type: Integer **FK**
@@ -66,13 +67,13 @@ classDiagram
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class outcome_type{
+    class outcome_types{
       id: Integer **PK**
       name: String
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class organisation{
+    class organisations{
       id: UUID **PK**
       name: String
       org_type: Integer
@@ -80,16 +81,15 @@ classDiagram
       charity_number: String
       charity_number_ni: String
       salesforce_account_id: String
-      address_link_id: UUID **FK**
       created_at: Timestamp
       updated_at Timestamp
     }
-    class user_organisation{
+    class user_organisations{
     id: UUID **PK**
     user_id: UUID **FK**
     organisation_id: UUID **FK**
     }
-    class user{
+    class users{
       id: UUID **PK**
       person_id: UUID **FK**
       organisation_id: UUID **FK**
@@ -105,36 +105,35 @@ classDiagram
       created_at: Timestamp
       updated_at : Timestamp
     }
-    class person{
+    class persons{
       id: UUID **PK**
       name: String
       date_of_birth: Date
       email: String
       phone_number: String
-      address_link_id: UUID **FK**
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class organisation_type{
+    class organisation_types{
       id: Integer **PK**
       name: String
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class organisation_mission{
+    class organisation_missions{
       id : UUID **PK*
       organisation_id: UUID **FK**
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class mission{
+    class missions{
       id: Integer **PK**
       organision_mission_id: UUID **FK**
       name: String
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class volunteer{
+    class volunteers{
       id: UUID **PK**
       application_id: UUID **FK**
       hours: Integer
@@ -142,7 +141,7 @@ classDiagram
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class non_cash_contribution{
+    class non_cash_contributions{
       id: UUID **PK**
       application_id: UUID **FK**
       amount: Float
@@ -150,7 +149,7 @@ classDiagram
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class cash_contribution {
+    class cash_contributions{
       id: UUID **PK**
       application_id: UUID **FK**
       amount: Float
@@ -159,20 +158,20 @@ classDiagram
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class supporting_evidence {
+    class supporting_evidence{
       id: UUID **PK**
       application_id: UUID **FK**
       description: Text
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class secured_type{
+    class secured_types{
       id: Integer **PK**
       name: String
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class cost{
+    class costs{
       id: UUID **PK**
       application_id: UUID **FK**
       cost_type: Integer **FK**
@@ -181,13 +180,13 @@ classDiagram
       created_at : Timestamp
       updated_at : Timestamp
     }
-    class cost_type{
+    class cost_types{
       id: Integer **PK**
       name: String
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class address{
+    class addresses{
       id: UUID **PK**
       line1: String
       line2: String
@@ -201,12 +200,7 @@ classDiagram
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class address_link{
-      id: UUID **PK**
-      address_id: UUID **FK**
-      owner_id: UUID **FK**
-    }
-    class grant_programme_sff_os{
+    class grant_programme_sff_small{
       id: UUID **PK**
       application_id: UUID **FK**
       title: String
@@ -225,13 +219,13 @@ classDiagram
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class permission_type{
+    class permission_types{
       id: Integer **PK**
       name: String
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class person_application{
+    class person_applications{
       id: Integer **PK**
       person_id: UUID **FK**
       application_id: UUID **FK**
@@ -239,14 +233,14 @@ classDiagram
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class person_declaration{
+    class person_declarations{
       id: UUID **PK**
       person_id: UUID **FK**
       declaration_id: UUID **FK*
       created_at: Timestamp
       updated_at: Timestamp
      }
-    class relationship_type{
+    class relationship_types{
       id: integer **PK**
       name: String
       created_at: Timestamp
@@ -260,11 +254,26 @@ classDiagram
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class application_declarations{
+    class funding_application_declarations{
       id: UUID **PK**
       application_id: UUID **FK**
       declaration_id: UUID **FK**
       created_at: Timestamp
       updated_at: Timestamp
+    }
+    class funding_applications_addresses{
+      id: UUID **PK**
+      address_id: UUID **FK**
+      funding_application_id: UUID **FK**
+    }
+    class organisations_addresses{
+      id: UUID **PK**
+      address_id: UUID **FK**
+      organisation_id: UUID **FK**
+    }
+    class persons_addresses{
+      id: UUID **PK**
+      address_id: UUID **FK**
+      person_id: UUID **FK**
     }
 </div>

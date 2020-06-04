@@ -1,4 +1,4 @@
-## person_declaration
+## person_declarations
 
 Records the relationship between a person and their declarations, 
 such as agreeing to user research.
