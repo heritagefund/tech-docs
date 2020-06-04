@@ -1,4 +1,4 @@
-## relationship types
+## relationship_types
 
 Records the different kinds of relationship that might 
 exist between an application and person. For instance, there

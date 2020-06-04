@@ -1,4 +1,4 @@
-##missions
+## missions
 
 Lookup table for organisation mission types.
 For example, "female led"

@@ -1,6 +1,6 @@
-## organisation types
+## organisation_types
 
-Describes the type of organisation.  Such as TBA
+Describes the type of organisation, e.g. 'local authority'.
 
 ```
 id: Integer **PK**
