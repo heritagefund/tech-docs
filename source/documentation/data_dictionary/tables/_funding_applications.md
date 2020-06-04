@@ -1,4 +1,4 @@
-##funding_applications
+## funding_applications
 
 Table that contains details specific to a funding application.
 
