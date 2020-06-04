@@ -1,4 +1,4 @@
-## organisation types
+## organisation_types
 
 Describes the type of organisation.  Such as TBA
 
