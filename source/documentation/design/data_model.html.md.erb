@@ -15,20 +15,20 @@ classDiagram
 
     funding_applications ..> organisations : 0..* to 1
     funding_applications <.. funding_applications_addresses : 1..* to 1
-    users ..> persons : 0..1 to 1
+    users ..> people : 0..1 to 1
     users ..> user_organisations : 1 to 1..*
     user_organisations ..> organisations : 1 to 1
-    persons <.. persons_addresses : 1..* to 1
-    person_applications ..> funding_applications : 0..* to 1
-    person_declarations ..> declarations : 1 to 1
-    person_declarations ..> persons : 0..* to 1
-    person_applications ..> relationship_types : 1 to 1
-    person_applications ..> persons : 1 to 1
+    people <.. people_addresses : 1..* to 1
+    people_applications ..> funding_applications : 0..* to 1
+    people_declarations ..> declarations : 1 to 1
+    people_declarations ..> people : 0..* to 1
+    people_applications ..> relationship_types : 1 to 1
+    people_applications ..> people : 1 to 1
     funding_application_declarations ..> funding_applications : 0..* to 1
     funding_application_declarations ..> declarations : 1 to 1
     funding_applications_addresses ..> addresses : 1 to 1
     organisations_addresses ..> addresses : 1 to 1
-    persons_addresses ..> addresses : 1 to 1
+    people_addresses ..> addresses : 1 to 1
     organisations <.. organisations_addresses : 1..* to 1
     organisations ..> organisation_types: 1 to 1
     organisation_missions ..> organisations: 1..* to 1
@@ -44,13 +44,16 @@ classDiagram
     non_cash_contributions ..> funding_applications : 0..* to 1
     volunteers ..> funding_applications : 0..* to 1
     supporting_evidence ..> funding_applications : 0..* to 1
+    gp_hef_loans ..> funding_applications : 0..1 to 1
+    gp_hef_loans ..> gp_hef_loans_org_income_types : 1 to 1..*
+    gp_hef_loans_org_income_types ..> org_income_type : 1 to 1
+    gp_hef_loans ..> gp_hef_loans_plans_for_loans : 1 to 1..*
+    gp_hef_loans_plans_for_loans ..> plans_for_loans : 1 to 1
+    gp_hef_loans ..> gp_hef_loans_repayment_freq : 1 to 1..*
+    gp_hef_loans_repayment_freq ..> loans_repayment_frequencies : 1 to 1
 
    class funding_applications{
       id: UUID **PK**
-      declaration: Boolean
-      declaration_description: Text
-      declaration_keep_informed: Boolean
-      declaration_user_research: Boolean
       project_reference_number: String
       salesforce_case_id: String
       salesforce_case_number: String
@@ -105,7 +108,7 @@ classDiagram
       created_at: Timestamp
       updated_at : Timestamp
     }
-    class persons{
+    class people{
       id: UUID **PK**
       name: String
       date_of_birth: Date
@@ -225,7 +228,7 @@ classDiagram
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class person_applications{
+    class people_applications{
       id: Integer **PK**
       person_id: UUID **FK**
       application_id: UUID **FK**
@@ -233,7 +236,7 @@ classDiagram
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class person_declarations{
+    class people_declarations{
       id: UUID **PK**
       person_id: UUID **FK**
       declaration_id: UUID **FK*
@@ -271,9 +274,78 @@ classDiagram
       address_id: UUID **FK**
       organisation_id: UUID **FK**
     }
-    class persons_addresses{
+    class people_addresses{
       id: UUID **PK**
       address_id: UUID **FK**
       person_id: UUID **FK**
+    }
+    class gp_hef_loans{
+      id: UUID **PK**
+      previous_nlhf_funding :  boolean 
+      can_legally_take_on_debt : boolean 
+      any_debt_restrictions : boolean 
+      debt_description : text
+      can_provide_security : boolean 
+      security_restrictions : boolean 
+      security_description : text
+      has_had_an_average_yearly_cash_surplus : boolean
+      average_yearly_cash_surplus : integer
+      has_had_a_surplus_in_last_reporting_year : boolean 
+      cash_surplus_in_last_year : integer
+      can_use_direct_bank_transfer : boolean 
+      bankruptcy_or_administration : boolean 
+      state_aid : boolean 
+      considers_state_aid : boolean 
+      has_applied_for_grant_or_loan :  boolean 
+      other_funding_details : text
+      efforts_to_reduce_borrowing : text
+      plans_for_loan_description : text
+      time_to_repay_loan : text
+      cashflow_understanding : text
+      loan_amount_requested : integer
+      gp_hef_loans_org_income_type : UUID **FK**
+      gp_hef_loans_plans_for_loan :UUID **FK** 
+      gp_hef_loans_repayment_frequency : UUID **FK**
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class plans_for_loans{
+      id: UUID **PK**
+      plan: string
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class loans_repayment_frequencies{
+      id: UUID **PK**
+      frequency : string
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class gp_hef_loans_plans_for_loans{
+      id: UUID **PK**
+      gp_hef_loan : UUID **FK**
+      plans_for_loan : UUID **FK**
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class gp_hef_loans_repayment_freq{
+      id: UUID **PK**
+      hef_loan : UUID **FK**
+      repayment_frequency : UUID **FK**
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class gp_hef_loans_org_income_types{
+      id: UUID **PK**
+      gp_hef_loan  : UUID **FK**
+      org_income_type  : UUID **FK**
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class org_income_type{
+      id: UUID **PK**
+      name : string
+      created_at: Timestamp
+      updated_at: Timestamp
     }
 </div>
