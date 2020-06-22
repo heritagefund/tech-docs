@@ -13,6 +13,13 @@ cases as quickly and easily as possible.
 <div class="mermaid">
 classDiagram
 
+    gp_hef_loans ..> funding_applications : 0..1 to 1
+    gp_hef_loans ..> gp_hef_loans_org_income_types : 1 to 1..*
+    gp_hef_loans_org_income_types ..> org_income_type : 1 to 1
+    gp_hef_loans ..> gp_hef_loans_plans_for_loans : 1 to 1..*
+    gp_hef_loans_plans_for_loans ..> plans_for_loans : 1 to 1
+    gp_hef_loans ..> gp_hef_loans_repayment_freq : 1 to 1..*
+    gp_hef_loans_repayment_freq ..> loans_repayment_frequencies : 1 to 1
     funding_applications ..> organisations : 0..* to 1
     funding_applications <.. funding_applications_addresses : 1..* to 1
     users ..> people : 0..1 to 1
@@ -44,13 +51,7 @@ classDiagram
     non_cash_contributions ..> funding_applications : 0..* to 1
     volunteers ..> funding_applications : 0..* to 1
     supporting_evidence ..> funding_applications : 0..* to 1
-    gp_hef_loans ..> funding_applications : 0..1 to 1
-    gp_hef_loans ..> gp_hef_loans_org_income_types : 1 to 1..*
-    gp_hef_loans_org_income_types ..> org_income_type : 1 to 1
-    gp_hef_loans ..> gp_hef_loans_plans_for_loans : 1 to 1..*
-    gp_hef_loans_plans_for_loans ..> plans_for_loans : 1 to 1
-    gp_hef_loans ..> gp_hef_loans_repayment_freq : 1 to 1..*
-    gp_hef_loans_repayment_freq ..> loans_repayment_frequencies : 1 to 1
+
 
    class funding_applications{
       id: UUID **PK**
@@ -294,13 +295,14 @@ classDiagram
       cash_surplus_in_last_year : integer
       can_use_direct_bank_transfer : boolean 
       bankruptcy_or_administration : boolean 
+      bankruptcy_or_administration_description : text
       state_aid : boolean 
       considers_state_aid : boolean 
       has_applied_for_grant_or_loan :  boolean 
       other_funding_details : text
       efforts_to_reduce_borrowing : text
       plans_for_loan_description : text
-      time_to_repay_loan : text
+      time_to_repay_loan : integer
       cashflow_understanding : text
       loan_amount_requested : integer
       gp_hef_loans_org_income_type : UUID **FK**
