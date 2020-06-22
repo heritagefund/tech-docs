@@ -1,6 +1,6 @@
 ## org_income_type
 
-The 'name' will store the income type than an organisation could have.
+The 'name' will store the income type that an organisation could have.
 
 ```
 id: UUID <<PK>>
