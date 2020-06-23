@@ -1,4 +1,4 @@
-##people
+## people
 
 Contains information about each person that is not necessarily related
 to a user of the service.

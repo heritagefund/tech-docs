@@ -1,4 +1,4 @@
-## loans_repayment_frequencies
+## repayment_frequencies
 
 The frequency that an applicant would like to repay the loan.  Can be Monthly, Quarterly or Yearly.
 

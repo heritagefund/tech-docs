@@ -1,4 +1,4 @@
-##people_addresses
+## people_addresses
 
 Link table that enables people to have a relationship
 with more than one address.

@@ -19,7 +19,7 @@ classDiagram
     gp_hef_loans ..> gp_hef_loans_plans_for_loans : 1 to 1..*
     gp_hef_loans_plans_for_loans ..> plans_for_loans : 1 to 1
     gp_hef_loans ..> gp_hef_loans_repayment_freq : 1 to 1..*
-    gp_hef_loans_repayment_freq ..> loans_repayment_frequencies : 1 to 1
+    gp_hef_loans_repayment_freq ..> repayment_frequencies : 1 to 1
     funding_applications ..> organisations : 0..* to 1
     funding_applications <.. funding_applications_addresses : 1..* to 1
     users ..> people : 0..1 to 1
@@ -296,7 +296,6 @@ classDiagram
       can_use_direct_bank_transfer : boolean 
       bankruptcy_or_administration : boolean 
       bankruptcy_or_administration_description : text
-      state_aid : boolean 
       considers_state_aid : boolean 
       has_applied_for_grant_or_loan :  boolean 
       other_funding_details : text
@@ -317,7 +316,7 @@ classDiagram
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class loans_repayment_frequencies{
+    class repayment_frequencies{
       id: UUID **PK**
       frequency : string
       created_at: Timestamp
@@ -332,7 +331,7 @@ classDiagram
     }
     class gp_hef_loans_repayment_freq{
       id: UUID **PK**
-      hef_loan : UUID **FK**
+      gp_hef_loan : UUID **FK**
       repayment_frequency : UUID **FK**
       created_at: Timestamp
       updated_at: Timestamp
