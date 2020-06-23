@@ -1,11 +1,11 @@
-## person_applications
+## people_applications
 
 Links an application to a person.  Also records the purpose of that
 relationship, such as legal signatory.  
 
 ```
   id: Integer <<PK>>
-  person_id: UUID <<FK>>        ID on the person table.
+  person_id: UUID <<FK>>        ID on the people table.
   application_id: UUID <<FK>>   ID on the application_id.
   relationship: Integer <<FK>>  Link to the relationship table.
 ```
