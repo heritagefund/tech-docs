@@ -1,6 +1,6 @@
 ## funding_applications
 
-Table that contains details specific to a funding application.
+Table that contains details specific to a funding application.  The current application table may contain additional rows as originally declaration data was kept on this table.
 
 ```
 id: UUID <<PK>>                         

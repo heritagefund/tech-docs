@@ -12,4 +12,6 @@ searching within the JSON.
   declaration_type: String      The type of declaration
   json: JSON                    A structured version of a declaration
   version: Integer              The version of the declaration
+  created_at : Timestamp
+  updated_at : Timestamp
 ```

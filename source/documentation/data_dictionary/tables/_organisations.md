@@ -8,7 +8,7 @@ will be necessary.
 ```
 id: UUID <<PK>
 name: String                        name of organisation
-org_type: Integer                   link to organisation_type table
+org_type: Integer                   old reference to an organisation type.  Now the organisations_org_types link table is used.
 company_number: String              
 charity_number: String
 charity_number_ni: String           charity number specific for Northern Ireland

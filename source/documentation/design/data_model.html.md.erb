@@ -15,10 +15,10 @@ classDiagram
 
     gp_hef_loans ..> funding_applications : 0..1 to 1
     gp_hef_loans ..> gp_hef_loans_org_income_types : 1 to 1..*
-    gp_hef_loans_org_income_types ..> org_income_type : 1 to 1
+    gp_hef_loans_org_income_types ..> org_income_types : 1 to 1
     gp_hef_loans ..> gp_hef_loans_plans_for_loans : 1 to 1..*
     gp_hef_loans_plans_for_loans ..> plans_for_loans : 1 to 1
-    gp_hef_loans ..> gp_hef_loans_repayment_freq : 1 to 1..*
+    gp_hef_loans ..> gp_hef_loans_repayment_freqs : 1 to 1..*
     gp_hef_loans_repayment_freq ..> repayment_frequencies : 1 to 1
     funding_applications ..> organisations : 0..* to 1
     funding_applications <.. funding_applications_addresses : 1..* to 1
@@ -26,18 +26,19 @@ classDiagram
     users ..> user_organisations : 1 to 1..*
     user_organisations ..> organisations : 1 to 1
     people <.. people_addresses : 1..* to 1
-    people_applications ..> funding_applications : 0..* to 1
+    funding_applications_people ..> funding_applications : 0..* to 1
     people_declarations ..> declarations : 1 to 1
     people_declarations ..> people : 0..* to 1
     people_applications ..> relationship_types : 1 to 1
     people_applications ..> people : 1 to 1
-    funding_application_declarations ..> funding_applications : 0..* to 1
-    funding_application_declarations ..> declarations : 1 to 1
+    funding_application_dclrtns ..> funding_applications : 0..* to 1
+    funding_application_dclrtns ..> declarations : 1 to 1
     funding_applications_addresses ..> addresses : 1 to 1
     organisations_addresses ..> addresses : 1 to 1
     people_addresses ..> addresses : 1 to 1
     organisations <.. organisations_addresses : 1..* to 1
-    organisations ..> organisation_types: 1 to 1
+    organisations <.. organisations_org_types: 1..* to 1
+    organisations_org_types ..> org_types: 1 to 1
     organisation_missions ..> organisations: 1..* to 1
     missions ..> organisation_missions : 0..* to 1
     outcomes..> outcome_types : 1 to 1
@@ -118,7 +119,7 @@ classDiagram
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class organisation_types{
+    class org_types{
       id: Integer **PK**
       name: String
       created_at: Timestamp
@@ -229,7 +230,7 @@ classDiagram
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class people_applications{
+    class funding_applications_people{
       id: Integer **PK**
       person_id: UUID **FK**
       application_id: UUID **FK**
@@ -240,7 +241,7 @@ classDiagram
     class people_declarations{
       id: UUID **PK**
       person_id: UUID **FK**
-      declaration_id: UUID **FK*
+      declaration_id: UUID **FK*\
       created_at: Timestamp
       updated_at: Timestamp
      }
@@ -258,7 +259,7 @@ classDiagram
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class funding_application_declarations{
+    class funding_application_dclrtns{
       id: UUID **PK**
       application_id: UUID **FK**
       declaration_id: UUID **FK**
@@ -329,7 +330,7 @@ classDiagram
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class gp_hef_loans_repayment_freq{
+    class gp_hef_loans_repayment_freqs{
       id: UUID **PK**
       gp_hef_loan : UUID **FK**
       repayment_frequency : UUID **FK**
@@ -343,9 +344,23 @@ classDiagram
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class org_income_type{
+    class org_income_types{
       id: UUID **PK**
       name : string
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class funding_applications_people{
+      id: UUID **PK**
+      person_id: UUID **FK**
+      funding_application_id: UUID **FK**
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class organisations_org_types{
+      id: UUID **PK**
+      organisation_id: UUID **FK**
+      org_type_id: UUID **FK**
       created_at: Timestamp
       updated_at: Timestamp
     }

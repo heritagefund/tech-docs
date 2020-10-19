@@ -1,4 +1,4 @@
-## gp_hef_loans_repayment_freq
+## gp_hef_loans_repayment_freqs
 
 Link table between gp_hef_loans and repayment_frequencies
 
