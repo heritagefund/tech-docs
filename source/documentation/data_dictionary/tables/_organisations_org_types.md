@@ -1,6 +1,6 @@
-## organisation_org_types
+## organisations_org_types
 
-Link table between and organisation and organisation types.
+Link table between organisations and organisation types.
 
 ```
 id: UUID <<PK>>
