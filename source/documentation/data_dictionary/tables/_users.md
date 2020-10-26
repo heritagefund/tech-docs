@@ -2,6 +2,7 @@
 
 Records details about the service user.  The Devise
 rubygem depends on some of this information (detailed below).
+The currently migrated table contains additional personal information, as it preceded the link tables.
 
 ```
 id: UUID <<PK>>

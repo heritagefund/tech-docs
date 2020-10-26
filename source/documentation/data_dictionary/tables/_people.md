@@ -9,6 +9,7 @@ name: String
 date_of_birth: Date
 email: String
 phone_number: String
+position: String
 created_at: Timestamp
 updated_at: Timestamp
 ```

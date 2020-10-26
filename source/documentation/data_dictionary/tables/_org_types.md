@@ -1,4 +1,4 @@
-## organisation_types
+## org_types
 
 Describes the type of organisation, e.g. 'local authority'.
 
