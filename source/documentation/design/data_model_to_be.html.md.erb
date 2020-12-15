@@ -14,13 +14,6 @@ to evolve to align with this data model.
 <div class="mermaid">
 classDiagram
 
-    gp_hef_loans ..> funding_applications : 0..1 to 1
-    gp_hef_loans ..> gp_hef_loans_org_income_types : 1 to 1..*
-    gp_hef_loans_org_income_types ..> org_income_types : 1 to 1
-    gp_hef_loans ..> gp_hef_loans_plans_for_loans : 1 to 1..*
-    gp_hef_loans_plans_for_loans ..> plans_for_loans : 1 to 1
-    gp_hef_loans ..> gp_hef_loans_repayment_freqs : 1 to 1..*
-    gp_hef_loans_repayment_freq ..> repayment_frequencies : 1 to 1
     funding_applications ..> organisations : 0..* to 1
     funding_applications <.. funding_applications_addresses : 1..* to 1
     users ..> people : 0..1 to 1
@@ -30,8 +23,6 @@ classDiagram
     funding_applications_people ..> funding_applications : 0..* to 1
     people_declarations ..> declarations : 1 to 1
     people_declarations ..> people : 0..* to 1
-    people_applications ..> relationship_types : 1 to 1
-    people_applications ..> people : 1 to 1
     funding_application_dclrtns ..> funding_applications : 0..* to 1
     funding_application_dclrtns ..> declarations : 1 to 1
     funding_applications_addresses ..> addresses : 1 to 1
@@ -48,12 +39,15 @@ classDiagram
     costs ..> funding_applications : 1..* to 1
     cash_contributions ..> secured_types : 1 to 1
     cash_contributions ..> funding_applications : 0..* to 1
-    grant_programme_sff_small ..> permission_types : 1 to 1
-    grant_programme_sff_small ..> funding_applications : 0..1 to 1
+    projects ..> permission_types : 1 to 1
+    projects ..> funding_applications : 0..1 to 1
     non_cash_contributions ..> funding_applications : 0..* to 1
     volunteers ..> funding_applications : 0..* to 1
     supporting_evidence ..> funding_applications : 0..* to 1
-
+    projects ..> funding_applications : 0..* to 1
+    people <.. funding_applications_people : 1..* to 1
+    funding_applications_people ..> relationship_types : 1 to 1
+    payment_details ..> funding_applications : 0..* to 1
 
    class funding_applications{
       id: UUID **PK**
@@ -206,9 +200,9 @@ classDiagram
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class grant_programme_sff_small{
+    class projects{
       id: UUID **PK**
-      application_id: UUID **FK**
+      funding_application_id: UUID **FK**
       title: String
       difference_description: Text
       community_description: Text
@@ -232,9 +226,9 @@ classDiagram
       updated_at: Timestamp
     }
     class funding_applications_people{
-      id: Integer **PK**
+      id: UUID **PK**
       person_id: UUID **FK**
-      application_id: UUID **FK**
+      funding_application_id: UUID **FK**
       relationship: Integer **FK*
       created_at: Timestamp
       updated_at: Timestamp
@@ -282,132 +276,10 @@ classDiagram
       address_id: UUID **FK**
       person_id: UUID **FK**
     }
-    class gp_hef_loans{
-      id: UUID **PK**
-      previous_nlhf_funding :  boolean 
-      can_legally_take_on_debt : boolean 
-      any_debt_restrictions : boolean 
-      debt_description : text
-      can_provide_security : boolean 
-      security_restrictions : boolean 
-      security_description : text
-      has_had_an_average_yearly_cash_surplus : boolean
-      average_yearly_cash_surplus : integer
-      has_had_a_surplus_in_last_reporting_year : boolean 
-      cash_surplus_in_last_year : integer
-      can_use_direct_bank_transfer : boolean 
-      bankruptcy_or_administration : boolean 
-      bankruptcy_or_administration_description : text
-      considers_state_aid : boolean 
-      has_applied_for_grant_or_loan :  boolean 
-      other_funding_details : text
-      efforts_to_reduce_borrowing : text
-      plans_for_loan_description : text
-      time_to_repay_loan : integer
-      cashflow_understanding : text
-      loan_amount_requested : integer
-      gp_hef_loans_org_income_type : UUID **FK**
-      gp_hef_loans_plans_for_loan :UUID **FK** 
-      gp_hef_loans_repayment_frequency : UUID **FK**
-      created_at: Timestamp
-      updated_at: Timestamp
-    }
-    class plans_for_loans{
-      id: UUID **PK**
-      plan: string
-      created_at: Timestamp
-      updated_at: Timestamp
-    }
-    class repayment_frequencies{
-      id: UUID **PK**
-      frequency : string
-      created_at: Timestamp
-      updated_at: Timestamp
-    }
-    class gp_hef_loans_plans_for_loans{
-      id: UUID **PK**
-      gp_hef_loan : UUID **FK**
-      plans_for_loan : UUID **FK**
-      created_at: Timestamp
-      updated_at: Timestamp
-    }
-    class gp_hef_loans_repayment_freqs{
-      id: UUID **PK**
-      gp_hef_loan : UUID **FK**
-      repayment_frequency : UUID **FK**
-      created_at: Timestamp
-      updated_at: Timestamp
-    }
-    class gp_hef_loans_org_income_types{
-      id: UUID **PK**
-      gp_hef_loan  : UUID **FK**
-      org_income_type  : UUID **FK**
-      created_at: Timestamp
-      updated_at: Timestamp
-    }
-    class org_income_types{
-      id: UUID **PK**
-      name : string
-      created_at: Timestamp
-      updated_at: Timestamp
-    }
-    class funding_applications_people{
-      id: UUID **PK**
-      person_id: UUID **FK**
-      funding_application_id: UUID **FK**
-      created_at: Timestamp
-      updated_at: Timestamp
-    }
     class organisations_org_types{
       id: UUID **PK**
       organisation_id: UUID **FK**
       org_type_id: UUID **FK**
-      created_at: Timestamp
-      updated_at: Timestamp
-    }
-        class projects{
-      id: UUID **PK**
-      project_title: String
-      user_id: bigint
-      start_date: date
-      end_date: date
-      description: String
-      line1: String
-      line2: String
-      line3: String
-      townCity: String
-      county: String
-      postcode: String
-      difference: String
-      matter: String
-      heritage_description: String
-      best_placed_description: String
-      involvement_description: String
-      permission_type: integer
-      permission_description: String
-      capital_work: boolean
-      outcome_2: boolean
-      outcome_3: boolean
-      outcome_4: boolean
-      outcome_5: boolean
-      outcome_6: boolean
-      outcome_7: boolean
-      outcome_8: boolean
-      outcome_9: boolean
-      outcome_2_description: String
-      outcome_3_description: String
-      outcome_4_description: String
-      outcome_5_description: String
-      outcome_6_description: String
-      outcome_7_description: String
-      outcome_8_description: String
-      outcome_9_description: String
-      is_partnership: boolean
-      partnership_details: String 
-      keep_informed_declaration: boolean
-      user_research_declaration: boolean
-      declaration_reasons_description: String
-      funding_application_id: uuid
       created_at: Timestamp
       updated_at: Timestamp
     }
