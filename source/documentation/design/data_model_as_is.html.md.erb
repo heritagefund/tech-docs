@@ -1,0 +1,270 @@
+---
+title: Design
+weight: 2
+---
+
+# As is data model
+
+This is the data model that underpins the current system.  Some of it was implemented 
+with tactical goals in mind, and so will change as it aligns to match the 'to be'
+data model.
+
+<%= partial 'partials/mermaid' %>
+
+<div class="mermaid">
+classDiagram
+
+    funding_applications ..> organisations : 0..* to 1
+    funding_applications <.. funding_applications_addresses : 1..* to 1
+    users ..> people : 0..1 to 1
+    users ..> users_organisations : 1 to 1..*
+    users_organisations ..> organisations : 1 to 1
+    people <.. people_addresses : 1..* to 1
+    funding_applications_people ..> funding_applications : 0..* to 1
+    funding_application_dclrtns ..> funding_applications : 0..* to 1
+    funding_application_dclrtns ..> declarations : 1 to 1
+    funding_applications_addresses ..> addresses : 1 to 1
+    people_addresses ..> addresses : 1 to 1
+    organisations <.. organisations_org_types: 0..* to 1
+    organisations_org_types ..> org_types: 1 to 1
+    cash_contributions ..> projects : 0..* to 1
+    non_cash_contributions ..> projects : 0..* to 1
+    volunteers ..> projects : 0..* to 1
+    evidence_of_support ..> projects : 0..* to 1
+    projects ..> funding_applications : 0..* to 1
+    project_costs ..> projects : 0..* to 1
+    payment_details ..> funding_applications : 0..* to 1
+    legal_signatories ..> organisations : 0..2 to 1
+    released_forms ..> projects : 0..* to 1
+
+   class funding_applications{
+      id: UUID **PK**
+      project_reference_number: String
+      salesforce_case_id: String
+      salesforce_case_number: String
+      submitted_on: String
+      organisation: UUID **FK**
+      created_at: Timestamp
+      updated_at: Timestamp
+	}
+    class organisations{
+      id: UUID **PK**
+      name: String
+      org_type: Integer
+      company_number: String
+      charity_number: String
+      charity_number_ni: String
+      salesforce_account_id: String
+      created_at: Timestamp
+      updated_at Timestamp
+    }
+    class users_organisations{
+    id: UUID **PK**
+    user_id: UUID **FK**
+    organisation_id: UUID **FK**
+    }
+    class users{
+      id: UUID **PK**
+      person_id: UUID **FK**
+      organisation_id: UUID **FK**
+      email: String
+      encrypted_password: String
+      reset_password_token: String
+      reset_password_sent_at: Timestamp
+      remember_created_at: Timestamp
+      confirmation_token: String
+      confirmed_at: Timestamp
+      confirmation_sent_at: Timestamp
+      unconfirmed_email: String
+      created_at: Timestamp
+      updated_at : Timestamp
+    }
+    class people{
+      id: UUID **PK**
+      name: String
+      date_of_birth: Date
+      email: String
+      phone_number: String
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class org_types{
+      id: Integer **PK**
+      name: String
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class volunteers{
+      id: UUID **PK**
+      application_id: UUID **FK**
+      hours: Integer
+      description: String
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class non_cash_contributions{
+      id: UUID **PK**
+      application_id: UUID **FK**
+      amount: Float
+      description: String
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class cash_contributions{
+      id: UUID **PK**
+      application_id: UUID **FK**
+      amount: Float
+      description: String
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class evidence_of_support{
+      id: UUID **PK**
+      application_id: UUID **FK**
+      description: String
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class addresses{
+      id: UUID **PK**
+      line1: String
+      line2: String
+      line3: String
+      townCity: String
+      County: Sting
+      postcode: String
+      udprn: String
+      lat: String
+      long: String
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class funding_applications_people{
+      id: Integer **PK**
+      person_id: UUID **FK**
+      application_id: UUID **FK**
+      relationship: Integer **FK*
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class declarations{
+      id: UUID **PK**
+      declaration_type: String
+      json: JSONB
+      version: integer
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class funding_application_dclrtns{
+      id: UUID **PK**
+      application_id: UUID **FK**
+      declaration_id: UUID **FK**
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class funding_applications_addresses{
+      id: UUID **PK**
+      address_id: UUID **FK**
+      funding_application_id: UUID **FK**
+    }
+    class people_addresses{
+      id: UUID **PK**
+      address_id: UUID **FK**
+      person_id: UUID **FK**
+    }
+    class funding_applications_people{
+      id: UUID **PK**
+      person_id: UUID **FK**
+      funding_application_id: UUID **FK**
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class organisations_org_types{
+      id: UUID **PK**
+      organisation_id: UUID **FK**
+      org_type_id: UUID **FK**
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class released_forms{
+      id: UUID **PK**
+      project_id: UUID **FK**
+      payload: jsonb
+      form_type: integer
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class projects{
+      id: UUID **PK**
+      project_title: String
+      user_id: bigint
+      start_date: date
+      end_date: date
+      description: String
+      line1: String
+      line2: String
+      line3: String
+      townCity: String
+      county: String
+      postcode: String
+      difference: String
+      matter: String
+      heritage_description: String
+      best_placed_description: String
+      involvement_description: String
+      permission_type: integer
+      permission_description: String
+      capital_work: boolean
+      outcome_2: boolean
+      outcome_3: boolean
+      outcome_4: boolean
+      outcome_5: boolean
+      outcome_6: boolean
+      outcome_7: boolean
+      outcome_8: boolean
+      outcome_9: boolean
+      outcome_2_description: String
+      outcome_3_description: String
+      outcome_4_description: String
+      outcome_5_description: String
+      outcome_6_description: String
+      outcome_7_description: String
+      outcome_8_description: String
+      outcome_9_description: String
+      is_partnership: boolean
+      partnership_details: String 
+      keep_informed_declaration: boolean
+      user_research_declaration: boolean
+      declaration_reasons_description: String
+      funding_application_id: uuid
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class project_costs{
+      id: UUID **PK**
+      cost_type: integer
+      amount: integer
+      description: String
+      project_id: UUID **FK**
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+      class payment_details{
+      id: UUID **PK**
+      account_name: String
+      account_number: String
+      sort_code: String
+      funding_application_id_id: UUID **FK**
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+      class legal_signatories{
+      id: UUID **PK**
+      name: String
+      email_address: String
+      phone_number: String
+      organisation_id: UUID **FK**
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+</div>

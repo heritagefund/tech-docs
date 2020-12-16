@@ -5,21 +5,15 @@ weight: 2
 
 # Proposed data model
 
-This is data model we will aim for.  Its designed to accommodate new business
-cases as quickly and easily as possible.
+This is data model are aiming for.  Its designed to accommodate new business
+cases as quickly and easily as possible.  The 'as is' data model wil continue 
+to evolve to align with this data model.
 
 <%= partial 'partials/mermaid' %>
 
 <div class="mermaid">
 classDiagram
 
-    gp_hef_loans ..> funding_applications : 0..1 to 1
-    gp_hef_loans ..> gp_hef_loans_org_income_types : 1 to 1..*
-    gp_hef_loans_org_income_types ..> org_income_types : 1 to 1
-    gp_hef_loans ..> gp_hef_loans_plans_for_loans : 1 to 1..*
-    gp_hef_loans_plans_for_loans ..> plans_for_loans : 1 to 1
-    gp_hef_loans ..> gp_hef_loans_repayment_freqs : 1 to 1..*
-    gp_hef_loans_repayment_freq ..> repayment_frequencies : 1 to 1
     funding_applications ..> organisations : 0..* to 1
     funding_applications <.. funding_applications_addresses : 1..* to 1
     users ..> people : 0..1 to 1
@@ -29,8 +23,6 @@ classDiagram
     funding_applications_people ..> funding_applications : 0..* to 1
     people_declarations ..> declarations : 1 to 1
     people_declarations ..> people : 0..* to 1
-    people_applications ..> relationship_types : 1 to 1
-    people_applications ..> people : 1 to 1
     funding_application_dclrtns ..> funding_applications : 0..* to 1
     funding_application_dclrtns ..> declarations : 1 to 1
     funding_applications_addresses ..> addresses : 1 to 1
@@ -47,14 +39,27 @@ classDiagram
     costs ..> funding_applications : 1..* to 1
     cash_contributions ..> secured_types : 1 to 1
     cash_contributions ..> funding_applications : 0..* to 1
-    grant_programme_sff_small ..> permission_types : 1 to 1
-    grant_programme_sff_small ..> funding_applications : 0..1 to 1
+    projects ..> permission_types : 1 to 1
+    projects ..> funding_applications : 0..1 to 1
     non_cash_contributions ..> funding_applications : 0..* to 1
     volunteers ..> funding_applications : 0..* to 1
     supporting_evidence ..> funding_applications : 0..* to 1
+    projects ..> funding_applications : 0..* to 1
+    people <.. funding_applications_people : 1..* to 1
+    funding_applications_people ..> relationship_types : 1 to 1
+    payment_details ..> funding_applications : 0..* to 1
+    pre_applications ..> organisations : 0..* to 1
+    pre_applications ..> heard_about : 1 to 0..1
+    pre_applications_people ..> pre_applications : 0..* to 1
+    pre_applications_dclrtns ..> pre_applications : 0..* to 1
+    pre_applications_dclrtns ..> declarations : 1 to 1
+    pre_applications_people ..> people : 1..* to 1
+    pre_applications_people ..> relationship_types : 1 to 1
+    pa_project_enquiries ..> pre_applications : 0..1 to 1
+    pa_expressions_of_interest ..> pre_applications : 0..1 to 1
 
 
-   class funding_applications{
+   class funding_applications {
       id: UUID **PK**
       project_reference_number: String
       salesforce_case_id: String
@@ -110,12 +115,15 @@ classDiagram
       created_at: Timestamp
       updated_at : Timestamp
     }
-    class people{
+    class people {
       id: UUID **PK**
       name: String
       date_of_birth: Date
       email: String
       phone_number: String
+      alt_phone_number: String
+      communication_needs: String
+      language_preference: String
       created_at: Timestamp
       updated_at: Timestamp
     }
@@ -205,9 +213,9 @@ classDiagram
       created_at: Timestamp
       updated_at: Timestamp
     }
-    class grant_programme_sff_small{
+    class projects{
       id: UUID **PK**
-      application_id: UUID **FK**
+      funding_application_id: UUID **FK**
       title: String
       difference_description: Text
       community_description: Text
@@ -231,9 +239,9 @@ classDiagram
       updated_at: Timestamp
     }
     class funding_applications_people{
-      id: Integer **PK**
+      id: UUID **PK**
       person_id: UUID **FK**
-      application_id: UUID **FK**
+      funding_application_id: UUID **FK**
       relationship: Integer **FK*
       created_at: Timestamp
       updated_at: Timestamp
@@ -281,86 +289,69 @@ classDiagram
       address_id: UUID **FK**
       person_id: UUID **FK**
     }
-    class gp_hef_loans{
-      id: UUID **PK**
-      previous_nlhf_funding :  boolean 
-      can_legally_take_on_debt : boolean 
-      any_debt_restrictions : boolean 
-      debt_description : text
-      can_provide_security : boolean 
-      security_restrictions : boolean 
-      security_description : text
-      has_had_an_average_yearly_cash_surplus : boolean
-      average_yearly_cash_surplus : integer
-      has_had_a_surplus_in_last_reporting_year : boolean 
-      cash_surplus_in_last_year : integer
-      can_use_direct_bank_transfer : boolean 
-      bankruptcy_or_administration : boolean 
-      bankruptcy_or_administration_description : text
-      considers_state_aid : boolean 
-      has_applied_for_grant_or_loan :  boolean 
-      other_funding_details : text
-      efforts_to_reduce_borrowing : text
-      plans_for_loan_description : text
-      time_to_repay_loan : integer
-      cashflow_understanding : text
-      loan_amount_requested : integer
-      gp_hef_loans_org_income_type : UUID **FK**
-      gp_hef_loans_plans_for_loan :UUID **FK** 
-      gp_hef_loans_repayment_frequency : UUID **FK**
-      created_at: Timestamp
-      updated_at: Timestamp
-    }
-    class plans_for_loans{
-      id: UUID **PK**
-      plan: string
-      created_at: Timestamp
-      updated_at: Timestamp
-    }
-    class repayment_frequencies{
-      id: UUID **PK**
-      frequency : string
-      created_at: Timestamp
-      updated_at: Timestamp
-    }
-    class gp_hef_loans_plans_for_loans{
-      id: UUID **PK**
-      gp_hef_loan : UUID **FK**
-      plans_for_loan : UUID **FK**
-      created_at: Timestamp
-      updated_at: Timestamp
-    }
-    class gp_hef_loans_repayment_freqs{
-      id: UUID **PK**
-      gp_hef_loan : UUID **FK**
-      repayment_frequency : UUID **FK**
-      created_at: Timestamp
-      updated_at: Timestamp
-    }
-    class gp_hef_loans_org_income_types{
-      id: UUID **PK**
-      gp_hef_loan  : UUID **FK**
-      org_income_type  : UUID **FK**
-      created_at: Timestamp
-      updated_at: Timestamp
-    }
-    class org_income_types{
-      id: UUID **PK**
-      name : string
-      created_at: Timestamp
-      updated_at: Timestamp
-    }
-    class funding_applications_people{
-      id: UUID **PK**
-      person_id: UUID **FK**
-      funding_application_id: UUID **FK**
-      created_at: Timestamp
-      updated_at: Timestamp
-    }
     class organisations_org_types{
       id: UUID **PK**
       organisation_id: UUID **FK**
       org_type_id: UUID **FK**
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+      class payment_details{
+      id: UUID **PK**
+      account_name: String
+      account_number: String
+      sort_code: String
+      funding_application_id_id: UUID **FK**
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class pre_applications {
+      id: UUID **PK**
+      project_reference_number: String
+      salesforce_case_id: String
+      salesforce_case_number: String
+      submitted_on: String
+      organisation: UUID **FK**
+      heard_about_id: Integer **FK**
+      heard_about_ff: String
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class pre_applications_people {
+      id: UUID **PK**
+      person_id: UUID **FK**
+      pre_application_id: UUID **FK**
+      relationship: Integer **FK*
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class heard_about {
+      id: Integer **PK**
+      name: String
+    }
+    class pre_applications_dclrtns {
+      id: UUID **PK**
+      application_id: UUID **FK**
+      declaration_id: UUID **FK**
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class pa_project_enquiries {
+      id: UUID **PK**
+      pre_application_id: UUID **FK**
+      previous_contact_name: String
+      project_description: String
+      project_likely_cost: String
+      potential_funding_amount: Integer
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class pa_expressions_of_interest {
+      id: UUID **PK**
+      pre_application_id: UUID **FK**
+      project_description: String
+      potential_funding_amount: Integer
+      likely_submission_description: String
       created_at: Timestamp
       updated_at: Timestamp
     }
