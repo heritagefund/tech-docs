@@ -15,8 +15,8 @@ jobs:
 
       - name: Install the CloudFoundry CLI
         run: |
-          wget https://s3-us-west-1.amazonaws.com/cf-cli-releases/releases/v6.48.0/cf-cli-installer_6.48.0_x86-64.deb
-          sudo dpkg -i cf-cli-installer_6.48.0_x86-64.deb
+          wget https://s3-us-west-1.amazonaws.com/v7-cf-cli-releases/releases/v7.2.0/cf7-cli-installer_7.2.0_x86-64.deb
+          sudo dpkg -i cf7-cli-installer_7.2.0_x86-64.deb
 
       - uses: actions/checkout@master
       - name: Build site
@@ -34,6 +34,4 @@ jobs:
           cf auth
           cf target -o national-lottery-heritage-fund
           cf target -s sandbox
-          cf v3-cancel-zdt-push dsdt-tech-docs || true
-          cf v3-apply-manifest -f manifest.yml
-          cf v3-zdt-push dsdt-tech-docs --wait-for-deploy-complete
+          cf push dsdt-tech-docs -f manifest.yml --strategy rolling

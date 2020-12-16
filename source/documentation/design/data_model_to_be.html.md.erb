@@ -340,7 +340,12 @@ classDiagram
       id: UUID **PK**
       pre_application_id: UUID **FK**
       previous_contact_name: String
-      project_description: String
+      heritage_focus: String
+      what_project_does: String
+      programme_outcomes: String
+      project_reasons: String
+      project_participants: String
+      project_timescales: String
       project_likely_cost: String
       potential_funding_amount: Integer
       created_at: Timestamp
@@ -349,7 +354,13 @@ classDiagram
     class pa_expressions_of_interest {
       id: UUID **PK**
       pre_application_id: UUID **FK**
-      project_description: String
+      heritage_focus: String
+      what_project_does: String
+      project_outcome: String
+      project_reasons: String
+      feasibility_or_options_work: String
+      project_timescales: String
+      overall_cost: String
       potential_funding_amount: Integer
       likely_submission_description: String
       created_at: Timestamp
