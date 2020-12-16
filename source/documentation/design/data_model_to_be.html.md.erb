@@ -48,8 +48,18 @@ classDiagram
     people <.. funding_applications_people : 1..* to 1
     funding_applications_people ..> relationship_types : 1 to 1
     payment_details ..> funding_applications : 0..* to 1
+    pre_applications ..> organisations : 0..* to 1
+    pre_applications ..> heard_about : 1 to 0..1
+    pre_applications_people ..> pre_applications : 0..* to 1
+    pre_applications_dclrtns ..> pre_applications : 0..* to 1
+    pre_applications_dclrtns ..> declarations : 1 to 1
+    pre_applications_people ..> people : 1..* to 1
+    pre_applications_people ..> relationship_types : 1 to 1
+    pa_project_enquiries ..> pre_applications : 0..1 to 1
+    pa_expressions_of_interest ..> pre_applications : 0..1 to 1
 
-   class funding_applications{
+
+   class funding_applications {
       id: UUID **PK**
       project_reference_number: String
       salesforce_case_id: String
@@ -105,12 +115,15 @@ classDiagram
       created_at: Timestamp
       updated_at : Timestamp
     }
-    class people{
+    class people {
       id: UUID **PK**
       name: String
       date_of_birth: Date
       email: String
       phone_number: String
+      alt_phone_number: String
+      communication_needs: String
+      language_preference: String
       created_at: Timestamp
       updated_at: Timestamp
     }
@@ -289,6 +302,56 @@ classDiagram
       account_number: String
       sort_code: String
       funding_application_id_id: UUID **FK**
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class pre_applications {
+      id: UUID **PK**
+      project_reference_number: String
+      salesforce_case_id: String
+      salesforce_case_number: String
+      submitted_on: String
+      organisation: UUID **FK**
+      heard_about_id: Integer **FK**
+      heard_about_ff: String
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class pre_applications_people {
+      id: UUID **PK**
+      person_id: UUID **FK**
+      pre_application_id: UUID **FK**
+      relationship: Integer **FK*
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class heard_about {
+      id: Integer **PK**
+      name: String
+    }
+    class pre_applications_dclrtns {
+      id: UUID **PK**
+      application_id: UUID **FK**
+      declaration_id: UUID **FK**
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class pa_project_enquiries {
+      id: UUID **PK**
+      pre_application_id: UUID **FK**
+      previous_contact_name: String
+      project_description: String
+      project_likely_cost: String
+      potential_funding_amount: Integer
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+    class pa_expressions_of_interest {
+      id: UUID **PK**
+      pre_application_id: UUID **FK**
+      project_description: String
+      potential_funding_amount: Integer
+      likely_submission_description: String
       created_at: Timestamp
       updated_at: Timestamp
     }
