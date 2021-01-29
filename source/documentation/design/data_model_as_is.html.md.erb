@@ -291,6 +291,7 @@ classDiagram
     class payment_requests {
       id:                 UUID **PK**
       amount_requested:   Float
+      payload_submitted:  JSONB
       created_at:         Timestamp
       updated_at:         Timestamp
     }
