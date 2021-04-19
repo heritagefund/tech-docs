@@ -37,6 +37,13 @@ classDiagram
     legal_signatories ..> organisations : 0..2 to 1
     released_forms ..> projects : 0..* to 1
 
+    payment_requests ..> funding_applications_payment_requests : 1 to 1
+    funding_applications ..> funding_applications_payment_requests : 1 to 1..*
+
+    spend ..> funding_applications_spend : 1 to 1
+    spend ..> cost_types : 0..* to 1
+    funding_applications ..> funding_applications_spend : 1 to 1..*
+
    class funding_applications{
       id: UUID **PK**
       project_reference_number: String
@@ -178,7 +185,7 @@ classDiagram
       address_id: UUID **FK**
       person_id: UUID **FK**
     }
-    class funding_applications_people{
+    class funding_applications_people {
       id: UUID **PK**
       person_id: UUID **FK**
       funding_application_id: UUID **FK**
@@ -273,4 +280,61 @@ classDiagram
       created_at: Timestamp
       updated_at: Timestamp
     }
+
+    class payment_details {
+      id:                         UUID **PK**
+      account_name:                   String
+      account_number:                 String
+      sort_code:                      String
+      replay_number:                  String
+      building_society_roll_number:   String
+      payment_reference:              String
+      funding_application_id:         UUID **FK**
+      created_at:                     Timestamp
+      updated_at:                     Timestamp
+    }
+
+    class payment_requests {
+      id:                 UUID **PK**
+      amount_requested:   Float
+      payload_submitted:  JSONB
+      created_at:         Timestamp
+      updated_at:         Timestamp
+    }
+
+    class funding_applications_payment_requests {
+      id:                         UUID **PK**
+      funding_application_id:     UUID **FK**
+      payment_request_id:         UUID **FK**
+      created_at:                 Timestamp
+      updated_at:                 Timestamp
+    }
+
+    class spend {
+      id:              UUID **PK**
+      cost_type:       Integer **FK**
+      description:     Text
+      date_of_spend:   Timestamp
+      net_amount:      Float
+      vat_amount:      Float
+      gross_amount:    Float
+      created_at:      Timestamp
+      updated_at:      Timestamp
+    }
+
+    class funding_applications_spend {
+      id:                       UUID **PK**
+      funding_application_id:   UUID **FK**
+      spend_id:                 UUID **FK**
+      created_at:               Timestamp
+      updated_at:               Timestamp
+    }
+
+    class cost_types {
+      id:           Integer **PK**
+      name:         String
+      created_at:   Timestamp
+      updated_at:   Timestamp
+    }
+
 </div>
