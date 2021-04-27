@@ -60,11 +60,8 @@ classDiagram
 
     gp_open_medium ..> funding_applications : 0..* to 1
     gp_open_medium ..> permission_types : 1 to 1
-    gp_open_medium ..> capital_work_ownership_types : 0..* to 0..1
-    gp_open_medium <.. gp_open_medium_heritage_designations : 0..* to 1..*
-    gp_open_medium_heritage_designations ..> heritage_designations : 0..* to 1
-    gp_open_medium <.. gp_open_medium_heritage_types : 0..* to 1..*
-    gp_open_medium_heritage_types ..> heritage_types : 0..* to 1
+    gp_open_medium <.. gp_o_m_heritage_dsgntns : 0..* to 1..*
+    gp_o_m_heritage_dsgntns ..> heritage_designations : 0..* to 1
 
 
    class funding_applications {
@@ -275,26 +272,40 @@ classDiagram
       evaluation_description: Text
       jobs_or_apprenticeships_description: Text
       acknowledgement_description: Text
-      received_advice_from_fund: Boolean
-      received_advice_from_fund_description: Text
       received_advice_description: Text
       first_fund_application: Boolean
-      most_recent_project_reference_number: String
-      most_recent_project_title: String
+      recent_project_reference_number: String
+      recent_project_title: String
       why_now_description: Text
       environmental_impacts_description: Text
+      acquisition: Boolean
+      hd_grade_1_description: Integer
+      hd_grade_2_b_description: Integer
+      hd_grade_2_c_description: Integer
+      hd_local_list_description: Integer
+      hd_monument_description: Integer
+      hd_historic_ship_description: Text
+      hd_grade_1_park_description: Text
+      hd_grade_2_park_description: Text
+      hd_grade_2_star_park_description: Text
+      hd_other_description: Text
+      ownership_type: String
+      ownership_type_org_description: Text
+      ownership_type_pp_description: Text
+      ownership_type_neither_description: Text
 
-      capital_work_ownership: UUID **FK**
       funding_application_id: UUID **FK**
       created_at: Timestamp
       updated_at: Timestamp
 
     }
 
-    class gp_open_medium_heritage_designations {
+    class gp_o_m_heritage_dsgntns {
       id: UUID **PK**
       gp_open_medium_id: UUID **FK**
       heritage_designation_id: UUID **FK**
+      created_at: Timestamp
+      updated_at: Timestamp
     }
 
     class heritage_designations {
@@ -302,26 +313,6 @@ classDiagram
       designation: String
       created_at: Timestamp
       updated_at: Timestamp
-    }
-
-    class gp_open_medium_heritage_types {
-      id: UUID **PK**
-      gp_open_medium_id: UUID **FK**
-      heritage_type_id: UUID **FK**
-      created_at: Timestamp
-      updated_at: Timestamp
-    }
-
-    class heritage_types {
-      id: UUID **PK**
-      heritage_type: String
-      created_at: Timestamp
-      updated_at: Timestamp
-    }
-
-    class capital_work_ownership_types {
-      id: UUID **PK**
-      ownership_type: String
     }
 
     class permission_types{
