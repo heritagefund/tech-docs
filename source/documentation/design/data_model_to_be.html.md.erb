@@ -5,9 +5,9 @@ weight: 2
 
 # Proposed data model
 
-This is data model are aiming for.  Its designed to accommodate new business
-cases as quickly and easily as possible.  The 'as is' data model wil continue 
-to evolve to align with this data model.
+This is data model that we are aiming for, which is designed to accommodate
+new business cases as quickly and easily as possible. The 'as is' data model
+will continue to evolve over time to align with this data model.
 
 <%= partial 'partials/mermaid' %>
 
@@ -57,6 +57,11 @@ classDiagram
     pre_applications_people ..> relationship_types : 1 to 1
     pa_project_enquiries ..> pre_applications : 0..1 to 1
     pa_expressions_of_interest ..> pre_applications : 0..1 to 1
+
+    gp_open_medium ..> funding_applications : 0..* to 1
+    gp_open_medium ..> permission_types : 1 to 1
+    gp_open_medium <.. gp_o_m_heritage_dsgntns : 0..* to 1..*
+    gp_o_m_heritage_dsgntns ..> heritage_designations : 0..* to 1
 
 
    class funding_applications {
@@ -237,6 +242,79 @@ classDiagram
       created_at: Timestamp
       updated_at: Timestamp
     }
+
+    class gp_open_medium {
+
+      id: UUID **PK**
+      title: String
+      start_date: Date
+      end_date: Date
+      description: Text
+      difference_description: Text
+      community_description: Text
+      heritage_description: Text
+      best_placed_description: Text
+      permission_type: id
+      permission_description: Text
+      capital_work: Boolean
+      is_partnership: Boolean
+      partnership_details: Text 
+
+      acquisitions_description: Text
+      heritage_at_risk: Boolean
+      heritage_at_risk_description: Text
+      heritage_formal_designation_description: Text
+      heritage_attracts_visitors: Boolean
+      visitors_in_last_financial_year: Integer
+      visitors_expected_per_year: Integer
+      potential_problems_description: Text
+      management_description: Text
+      evaluation_description: Text
+      jobs_or_apprenticeships_description: Text
+      acknowledgement_description: Text
+      received_advice_description: Text
+      first_fund_application: Boolean
+      recent_project_reference_number: String
+      recent_project_title: String
+      why_now_description: Text
+      environmental_impacts_description: Text
+      acquisition: Boolean
+      hd_grade_1_description: Integer
+      hd_grade_2_b_description: Integer
+      hd_grade_2_c_description: Integer
+      hd_local_list_description: Integer
+      hd_monument_description: Integer
+      hd_historic_ship_description: Text
+      hd_grade_1_park_description: Text
+      hd_grade_2_park_description: Text
+      hd_grade_2_star_park_description: Text
+      hd_other_description: Text
+      ownership_type: String
+      ownership_type_org_description: Text
+      ownership_type_pp_description: Text
+      ownership_type_neither_description: Text
+
+      funding_application_id: UUID **FK**
+      created_at: Timestamp
+      updated_at: Timestamp
+
+    }
+
+    class gp_o_m_heritage_dsgntns {
+      id: UUID **PK**
+      gp_open_medium_id: UUID **FK**
+      heritage_designation_id: UUID **FK**
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+
+    class heritage_designations {
+      id: UUID **PK**
+      designation: String
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+
     class permission_types{
       id: Integer **PK**
       name: String

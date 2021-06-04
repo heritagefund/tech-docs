@@ -5,7 +5,7 @@ weight: 2
 
 # As is data model
 
-This is the data model that underpins the current system.  Some of it was implemented 
+This is the data model that underpins the current system. Some of it was implemented 
 with tactical goals in mind, and so will change as it aligns to match the 'to be'
 data model.
 
@@ -36,6 +36,16 @@ classDiagram
     payment_details ..> funding_applications : 0..* to 1
     legal_signatories ..> organisations : 0..2 to 1
     released_forms ..> projects : 0..* to 1
+
+    gp_open_medium ..> funding_applications : 0..* to 1
+    project_costs ..> gp_open_medium : 0..* to 1
+    cash_contributions ..> gp_open_medium : 0..* to 1
+    non_cash_contributions ..> gp_open_medium : 0..* to 1
+    volunteers ..> gp_open_medium : 0..* to 1
+    evidence_of_support ..> gp_open_medium : 0..* to 1
+    gp_open_medium ..> capital_work_ownership_types : 0..* to 0..1
+    gp_open_medium <.. gp_o_m_heritage_dsgntns : 0..* to 1..*
+    gp_o_m_heritage_dsgntns ..> heritage_designations : 0..* to 1
 
    class funding_applications{
       id: UUID **PK**
@@ -246,6 +256,106 @@ classDiagram
       created_at: Timestamp
       updated_at: Timestamp
     }
+
+    class gp_open_medium {
+
+      id: UUID **PK**
+      project_title: String
+      user_id: BigInt
+      start_date: Date
+      end_date: Date
+      description: Text
+      line1: String
+      line2: String
+      line3: String
+      townCity: String
+      county: String
+      postcode: String
+      difference: Text
+      matter: Text
+      heritage_description: Text
+      best_placed_description: Text
+      involvement_description: Text
+      permission_type: integer
+      permission_description: Text
+      capital_work: Boolean
+      outcome_2: Boolean
+      outcome_3: Boolean
+      outcome_4: Boolean
+      outcome_5: Boolean
+      outcome_6: Boolean
+      outcome_7: Boolean
+      outcome_8: Boolean
+      outcome_9: Boolean
+      outcome_2_description: Text
+      outcome_3_description: Text
+      outcome_4_description: Text
+      outcome_5_description: Text
+      outcome_6_description: Text
+      outcome_7_description: Text
+      outcome_8_description: Text
+      outcome_9_description: Text
+      is_partnership: Boolean
+      partnership_details: Text 
+      keep_informed_declaration: Boolean
+      user_research_declaration: Boolean
+      declaration_reasons_description: Text
+
+      acquisitions_description: Text
+      heritage_at_risk: Boolean
+      heritage_at_risk_description: Text
+      heritage_formal_designation_description: Text
+      heritage_attracts_visitors: Boolean
+      visitors_in_last_financial_year: Integer
+      visitors_expected_per_year: Integer
+      potential_problems_description: Text
+      management_description: Text
+      evaluation_description: Text
+      jobs_or_apprenticeships_description: Text
+      acknowledgement_description: Text
+      received_advice_description: Text
+      first_fund_application: Boolean
+      recent_project_reference_number: String
+      recent_project_title: String
+      why_now_description: Text
+      environmental_impacts_description: Text
+      acquisition: Boolean
+      hd_grade_1_description: Integer
+      hd_grade_2_b_description: Integer
+      hd_grade_2_c_description: Integer
+      hd_local_list_description: Integer
+      hd_monument_description: Integer
+      hd_historic_ship_description: Text
+      hd_grade_1_park_description: Text
+      hd_grade_2_park_description: Text
+      hd_grade_2_star_park_description: Text
+      hd_other_description: Text
+      ownership_type: String
+      ownership_type_org_description: Text
+      ownership_type_pp_description: Text
+      ownership_type_neither_description: Text
+
+      funding_application_id: UUID **FK**
+      created_at: Timestamp
+      updated_at: Timestamp
+
+    }
+
+    class gp_o_m_heritage_dsgntns {
+      id: UUID **PK**
+      gp_open_medium_id: UUID **FK**
+      heritage_designation_id: UUID **FK**
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+
+    class heritage_designations {
+      id: UUID **PK**
+      designation: String
+      created_at: Timestamp
+      updated_at: Timestamp
+    }
+
     class project_costs{
       id: UUID **PK**
       cost_type: integer
